@@ -11,12 +11,16 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { login } from "@lib/actions/login";
 import { LoginSchema } from "@lib/schemas";
+import { useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -28,7 +32,12 @@ const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log("values", values);
+    startTransition(() => {
+      login(values, callbackUrl).then((data) => {
+        // TODO: show error summary or alert
+        console.log("data", data);
+      });
+    });
   };
 
   return (
