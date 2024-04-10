@@ -1,0 +1,14 @@
+#        _
+#       [ ]
+#      (   )
+#       |>|
+#    __/===\__
+#   //| o=o |\\
+# <]  | o=o |  [>
+#     \=====/
+#    / / | \ \
+#   <_________>
+
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
