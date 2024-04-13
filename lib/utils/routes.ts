@@ -1,3 +1,7 @@
+import { AdminRoute } from "@lib/utils/types";
+import { FaUserCog } from "react-icons/fa";
+import { MdLocationCity } from "react-icons/md";
+
 /**
  * An array of routes that are used for authentication.
  * These routes will redirect logged in users to DEFAULT_LOGIN_REDIRECT
@@ -23,3 +27,20 @@ export const publicApiRoutes: string[] = ["/api/users"];
  * @type {string}
  */
 export const DEFAULT_LOGIN_REDIRECT: string = "/users";
+
+/**
+ * An array of routes that will be exposed to public. Authentication will be handled through JWT strategy and not by Next-Auth
+ * @type {string[]}
+ */
+export const ROUTES: AdminRoute[] = [
+  {
+    icon: FaUserCog,
+    label: "Users",
+    href: "/users",
+  },
+  {
+    icon: MdLocationCity,
+    label: "Management",
+    href: "/management",
+  },
+];

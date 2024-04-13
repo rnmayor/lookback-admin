@@ -3,7 +3,7 @@ import { auth } from "@auth";
 export default async function Users() {
   const session = await auth();
   return (
-    <div className="bg-emerald-500">
+    <div>
       Users page
       <div>
         server session

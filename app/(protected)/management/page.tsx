@@ -11,7 +11,7 @@ export default function Management() {
   const clientSession = useSession();
 
   return (
-    <div className="bg-emerald-500">
+    <div>
       Management page
       <Button onClick={onClick}>Logout</Button>
       <div>Client session {JSON.stringify(clientSession)}</div>
