@@ -40,7 +40,7 @@ export const ROUTES: AdminRoute[] = [
   },
   {
     icon: MdLocationCity,
-    label: "Management",
-    href: "/management",
+    label: "Locations",
+    href: "/locations",
   },
 ];

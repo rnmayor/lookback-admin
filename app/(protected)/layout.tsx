@@ -1,3 +1,4 @@
+import Navbar from "@components/main/navbar";
 import Sidebar from "@components/main/sidebar";
 
 export default function ProtectedLayout({
@@ -7,12 +8,12 @@ export default function ProtectedLayout({
 }) {
   return (
     <div className="h-full">
-      <div className="h-[80px] md:pl-56 fixed inset-y-0 w-full z-50">
-        Navbar
-      </div>
-      <div className="hidden md:flex h-full w-56 flex-col fixed inset-y-0 z-50">
+      <nav className="h-[80px] md:pl-56 fixed inset-y-0 w-full z-50">
+        <Navbar />
+      </nav>
+      <nav className="hidden md:flex h-full w-56 flex-col fixed inset-y-0 z-50">
         <Sidebar />
-      </div>
+      </nav>
       <main className="md:pl-56 pt-[80px] h-full">{children}</main>
     </div>
   );
