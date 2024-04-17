@@ -20,6 +20,9 @@ export const getUserById = async (id: string) => {
       where: {
         id,
       },
+      include: {
+        userCovidStatus: true,
+      },
     });
 
     return user;

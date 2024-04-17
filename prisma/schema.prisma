@@ -16,11 +16,37 @@ datasource db {
 model User {
   id            String    @id @default(uuid())
   name          String?
-  email         String?   @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
+
+  fname       String
+  lname       String
+  regCode     Int
+  provCode    Int
+  citymunCode Int
+  brgyCode    Int?
+  gender      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userCovidStatus UserCovidStatus?
+}
+
+model UserCovidStatus {
+  id     String  @id @default(uuid())
+  status String?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model Account {
@@ -38,6 +64,9 @@ model Account {
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([provider, providerAccountId])
 }

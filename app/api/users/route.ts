@@ -1,28 +1,21 @@
+import { currentUser } from "@lib/hooks/auth";
 import { db } from "@lib/utils/db";
-import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
-// TODO: add authentication (Next-auth if private api, otherwise JWT strat)
-export async function GET(req: Request) {
-  return new NextResponse("Success", { status: 200 });
-}
-
-export async function POST(req: Request) {
+export async function GET() {
   try {
-    const { name, email, emailVerified, image, password } = await req.json();
+    const user = await currentUser();
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await db.user.create({
-      data: {
-        name,
-        email,
-        emailVerified,
-        image,
-        password: hashedPassword,
+    const users = await db.user.findMany({
+      orderBy: {
+        name: "asc",
       },
     });
 
-    return NextResponse.json(newUser);
+    return NextResponse.json(users);
   } catch (error) {
     return new NextResponse("Internal Error", { status: 500 });
   }

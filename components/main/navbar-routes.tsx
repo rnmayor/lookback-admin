@@ -1,5 +1,6 @@
 import { capitalizeFirstLetter } from "@lib/utils";
 import { usePathname } from "next/navigation";
+import Heading from "./heading";
 import UserButton from "./user-button";
 
 const NavbarRoutes = () => {
@@ -8,7 +9,7 @@ const NavbarRoutes = () => {
 
   return (
     <div className="flex items-center justify-between w-full">
-      <h1 className="text-2xl font-medium">Manage {pageTitle}</h1>
+      <Heading title={`Manage ${pageTitle}`} description="" />
       <UserButton />
     </div>
   );
