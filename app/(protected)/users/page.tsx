@@ -13,6 +13,7 @@ export default async function Users() {
   });
 
   const formattedUsers: UserColumn[] = users.map((item) => ({
+    id: item.id,
     name: item.name,
     email: item.email,
     regCode: item.regCode,
@@ -25,7 +26,7 @@ export default async function Users() {
 
   return (
     <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex-1 space-y-4 p-6 pt-3">
         <UsersClient data={formattedUsers} />
       </div>
     </div>

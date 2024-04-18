@@ -2,19 +2,25 @@
 
 import { UserCovidStatus } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import CellAction from "./cell-action";
 
 export type UserColumn = {
+  id: string;
   name: string | null;
   email: string | null;
-  regCode: number;
-  provCode: number;
-  citymunCode: number;
-  brgyCode: number | null;
+  regCode: string;
+  provCode: string;
+  citymunCode: string;
+  brgyCode: string | null;
   gender: string | null;
   covidStatus?: UserCovidStatus["status"] | null;
 };
 
 export const columns: ColumnDef<UserColumn>[] = [
+  {
+    id: "actions",
+    cell: ({ row }) => <CellAction data={row.original} />,
+  },
   {
     accessorKey: "name",
     header: "Name",

@@ -24,11 +24,11 @@ model User {
 
   fname       String
   lname       String
-  regCode     Int
-  provCode    Int
-  citymunCode Int
-  brgyCode    Int?
-  gender      String?
+  regCode     String
+  provCode    String
+  citymunCode String
+  brgyCode    String
+  gender      String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -21,17 +21,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SearchIcon } from "lucide-react";
+import { Plus, SearchIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  role: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  role,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [filtering, setFiltering] = useState("");
 
@@ -51,7 +55,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 justify-between">
         <div className="relative flex items-center w-full max-w-sm">
           <Input
             placeholder="Search..."
@@ -61,6 +65,9 @@ export function DataTable<TData, TValue>({
           />
           <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
         </div>
+        <Button size="sm" onClick={() => router.push(`/users/new`)}>
+          <Plus className="mr-2 h-4 w-4" /> Add New
+        </Button>
       </div>
       <div className="rounded-md border">
         <Table>

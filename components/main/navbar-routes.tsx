@@ -5,7 +5,8 @@ import UserButton from "./user-button";
 
 const NavbarRoutes = () => {
   const pathname = usePathname();
-  const pageTitle = capitalizeFirstLetter(pathname.slice(1));
+  const mainPage = pathname.split("/")[1];
+  const pageTitle = capitalizeFirstLetter(mainPage);
 
   return (
     <div className="flex items-center justify-between w-full">
