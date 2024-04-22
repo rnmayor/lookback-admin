@@ -1,5 +1,6 @@
 "use client";
 
+import { Barangay, CityMunicipality, Province, Region } from "@lib/utils/types";
 import { UserCovidStatus } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import CellAction from "./cell-action";
@@ -8,12 +9,16 @@ export type UserColumn = {
   id: string;
   name: string | null;
   email: string | null;
-  regCode: string;
-  provCode: string;
-  citymunCode: string;
-  brgyCode: string | null;
-  gender: string | null;
-  covidStatus?: UserCovidStatus["status"] | null;
+  // regCode: string;
+  region: Region;
+  // provCode: string;
+  province: Province;
+  // citymunCode: string;
+  cityMunicipality: CityMunicipality;
+  // brgyCode: string;
+  barangay: Barangay;
+  age: number;
+  covidStatus?: UserCovidStatus["status"];
 };
 
 export const columns: ColumnDef<UserColumn>[] = [
@@ -30,24 +35,48 @@ export const columns: ColumnDef<UserColumn>[] = [
     header: "Email",
   },
   {
-    accessorKey: "regCode",
+    accessorKey: "region",
     header: "Region",
+    cell: ({ row }) => {
+      const region = row.original.region;
+      return <div>{region.regDesc}</div>;
+    },
   },
   {
-    accessorKey: "provCode",
+    accessorKey: "province",
     header: "Province",
+    cell: ({ row }) => {
+      const province = row.original.province;
+      return <div>{province.provDesc}</div>;
+    },
   },
   {
-    accessorKey: "citymunCode",
-    header: "City",
+    accessorKey: "cityMunicipality",
+    header: "City/Municipality",
+    cell: ({ row }) => {
+      const cityMunicipality = row.original.cityMunicipality;
+      return <div>{cityMunicipality.citymunDesc}</div>;
+    },
   },
+  // {
+  //   accessorKey: "citymunCode",
+  //   header: "City",
+  // },
+  // {
+  //   accessorKey: "brgyCode",
+  //   header: "Barangay",
+  // },
   {
-    accessorKey: "brgyCode",
+    accessorKey: "barangay",
     header: "Barangay",
+    cell: ({ row }) => {
+      const barangay = row.original.barangay;
+      return <div>{barangay.brgyDesc}</div>;
+    },
   },
   {
-    accessorKey: "gender",
-    header: "Gender",
+    accessorKey: "age",
+    header: "Age",
   },
   {
     accessorKey: "covidStatus",

@@ -6,12 +6,33 @@ export const LoginSchema = z.object({
 });
 
 export const UserSchema = z.object({
-  fname: z.string().min(1),
-  lname: z.string().min(1),
-  regCode: z.string().min(1),
-  provCode: z.string().min(1),
-  citymunCode: z.string().min(1),
-  brgyCode: z.string().min(1),
-  gender: z.string().min(1),
-  covidStatus: z.string().optional().nullable(),
+  email: z.string().optional(),
+  fname: z.string().min(1, {
+    message: "First name is required",
+  }),
+  lname: z.string().min(1, {
+    message: "Last name is required",
+  }),
+  regCode: z.string().min(1, {
+    message: "Region is required",
+  }),
+  provCode: z.string().min(1, {
+    message: "Province is required",
+  }),
+  citymunCode: z.string().min(1, {
+    message: "City is required",
+  }),
+  brgyCode: z.string().min(1, {
+    message: "Barangay is required",
+  }),
+  gender: z.string().min(1, {
+    message: "Gender is required",
+  }),
+  // dob: z.string().min(1, {
+  //   message: "Birth date is required",
+  // }),
+  dob: z.date().refine((date) => date !== undefined, {
+    message: "Date of birth is required",
+  }),
+  covidStatus: z.boolean().optional(),
 });

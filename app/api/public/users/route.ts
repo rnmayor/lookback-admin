@@ -22,6 +22,8 @@ export async function POST(req: Request) {
       citymunCode,
       brgyCode,
       gender,
+      birthDate,
+      age,
     } = await req.json();
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -39,6 +41,8 @@ export async function POST(req: Request) {
         citymunCode,
         brgyCode,
         gender,
+        birthDate,
+        age,
       },
     });
 

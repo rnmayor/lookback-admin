@@ -1,5 +1,11 @@
 import { IconType } from "react-icons";
 
+export type SortOrder = "asc" | "desc";
+export enum Gender {
+  FEMALE = "FEMALE",
+  MALE = "MALE",
+}
+
 export interface AdminRoute {
   icon: IconType;
   label: string;
@@ -17,14 +23,14 @@ export type Province = {
   provDesc: string;
 };
 
-export type CityMun = {
+export type CityMunicipality = {
   regCode: string;
   provCode: string;
   citymunCode: string;
   citymunDesc: string;
 };
 
-export type Brgy = {
+export type Barangay = {
   regCode: string;
   provCode: string;
   citymunCode: string;

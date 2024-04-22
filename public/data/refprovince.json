@@ -471,14 +471,7 @@
   {
     "id": 68,
     "psgcCode": "133900000",
-    "provDesc": "NCR, CITY OF MANILA, FIRST DISTRICT",
-    "regCode": "13",
-    "provCode": "1339"
-  },
-  {
-    "id": 69,
-    "psgcCode": "133900000",
-    "provDesc": "CITY OF MANILA",
+    "provDesc": "NCR, FIRST DISTRICT",
     "regCode": "13",
     "provCode": "1339"
   },
