@@ -49,7 +49,7 @@ import { User, UserCovidStatus } from "@prisma/client";
 import axios from "axios";
 import { format } from "date-fns";
 import { CalendarIcon, Check, ChevronsUpDown, Trash } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -73,6 +73,7 @@ const UserForm = ({
   cityMunicipalities,
   barangays,
 }: UserFormProps) => {
+  const params = useParams();
   const router = useRouter();
   const pathName = usePathname();
   const userId = pathName.split("/")[2];
@@ -83,17 +84,34 @@ const UserForm = ({
     }
 
     if (initialData) {
-      const sortedProvinces = sortByProperty(provinces, "provDesc", "asc");
+      const filteredProvinces = provinces.filter(
+        (x: Province) => x.regCode === initialData.regCode
+      );
+      const sortedProvinces = sortByProperty(
+        filteredProvinces,
+        "provDesc",
+        "asc"
+      );
       setSortedProvinces(sortedProvinces);
 
+      const filteredCityMun = cityMunicipalities.filter(
+        (x: CityMunicipality) => x.provCode === initialData.provCode
+      );
       const sortedCityMun = sortByProperty(
-        cityMunicipalities,
+        filteredCityMun,
         "citymunDesc",
         "asc"
       );
       setSortedCityMun(sortedCityMun);
 
-      const sortedBarangay = sortByProperty(barangays, "brgyDesc", "asc");
+      const filteredBarangay = barangays.filter(
+        (x: Barangay) => x.citymunCode === initialData.citymunCode
+      );
+      const sortedBarangay = sortByProperty(
+        filteredBarangay,
+        "brgyDesc",
+        "asc"
+      );
       setSortedBarangay(sortedBarangay);
     }
   }, []);
@@ -136,7 +154,6 @@ const UserForm = ({
         citymunCode: "",
         brgyCode: "",
         gender: "",
-        // dob: undefined,
       };
 
   const form = useForm<z.infer<typeof UserSchema>>({
@@ -148,13 +165,18 @@ const UserForm = ({
     try {
       setLoading(true);
       if (initialData) {
+        await axios.patch(`/api/users/${params.userId}`, data);
+        router.push(`/users`);
+        router.refresh();
+        // TODO: toast success
+        console.log("SUCCESS UPDATE");
         // todo: update to DB
       } else {
         await axios.post(`/api/users`, data);
-        router.refresh();
         router.push(`/users`);
+        router.refresh();
         // TODO: toast success
-        console.log("SUCCESS");
+        console.log("SUCCESS CREATE");
       }
     } catch (error) {
       // TODO: toast error
@@ -171,6 +193,8 @@ const UserForm = ({
     form.setValue("brgyCode", "");
 
     setSortedProvinces(provinces.filter((x) => x.regCode === region.regCode));
+    setSortedCityMun([]);
+    setSortedBarangay([]);
 
     setOpenRegion(false);
   };
@@ -183,6 +207,7 @@ const UserForm = ({
     setSortedCityMun(
       cityMunicipalities.filter((x) => x.provCode === province.provCode)
     );
+    setSortedBarangay([]);
 
     setOpenProvince(false);
   };
@@ -427,7 +452,13 @@ const UserForm = ({
                         <CommandList>
                           <CommandInput placeholder="Search province..." />
                           <CommandEmpty>No province found.</CommandEmpty>
-                          <CommandGroup heading="Provinces">
+                          <CommandGroup
+                            heading={
+                              sortedProvinces.length === 0
+                                ? "Select region first"
+                                : "Provinces"
+                            }
+                          >
                             {sortedProvinces.map((province) => (
                               <CommandItem
                                 key={province.provCode}
@@ -492,7 +523,13 @@ const UserForm = ({
                           <CommandEmpty>
                             No city/municipality found.
                           </CommandEmpty>
-                          <CommandGroup heading="City/Municipality">
+                          <CommandGroup
+                            heading={
+                              sortedCityMun.length === 0
+                                ? "Select province first"
+                                : "City/Municipality"
+                            }
+                          >
                             {sortedCityMun.map((cityMun) => (
                               <CommandItem
                                 key={cityMun.citymunCode}
@@ -555,7 +592,13 @@ const UserForm = ({
                         <CommandList>
                           <CommandInput placeholder="Search barangay..." />
                           <CommandEmpty>No barangay found.</CommandEmpty>
-                          <CommandGroup heading="Barangays">
+                          <CommandGroup
+                            heading={
+                              sortedBarangay.length === 0
+                                ? "Select city/municipality first"
+                                : "Barangays"
+                            }
+                          >
                             {sortedBarangay.map((barangay) => (
                               <CommandItem
                                 key={barangay.brgyCode}

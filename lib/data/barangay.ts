@@ -18,26 +18,6 @@ export async function getAllBarangays() {
   }
 }
 
-export async function getBarangays(citymunCode?: string) {
-  try {
-    const jsonDirectory = path.join(process.cwd(), "public", "data");
-    const fileContents = await fs.readFile(
-      jsonDirectory + "/refbrgy.json",
-      "utf-8"
-    );
-
-    const barangays = JSON.parse(fileContents);
-
-    if (citymunCode) {
-      return barangays.filter((x: Barangay) => x.citymunCode === citymunCode);
-    }
-
-    return barangays;
-  } catch (error) {
-    throw new Error("Failed to fetch API barangay data");
-  }
-}
-
 export async function getBarangay(brgyCode: string) {
   try {
     const jsonDirectory = path.join(process.cwd(), "public", "data");

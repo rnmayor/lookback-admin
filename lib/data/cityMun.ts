@@ -18,28 +18,6 @@ export async function getAllCityMunicipalities() {
   }
 }
 
-export async function getCityMunicipalities(provCode?: string) {
-  try {
-    const jsonDirectory = path.join(process.cwd(), "public", "data");
-    const fileContents = await fs.readFile(
-      jsonDirectory + "/refcitymun.json",
-      "utf-8"
-    );
-
-    const cityMunicipalities = JSON.parse(fileContents);
-
-    if (provCode) {
-      return cityMunicipalities.filter(
-        (x: CityMunicipality) => x.provCode === provCode
-      );
-    }
-
-    return cityMunicipalities;
-  } catch (error) {
-    throw new Error("Failed to fetch API city/municipality data");
-  }
-}
-
 export async function getCityMunicipality(citymunCode: string) {
   try {
     const jsonDirectory = path.join(process.cwd(), "public", "data");

@@ -18,20 +18,6 @@ export async function getAllRegions() {
   }
 }
 
-export async function getRegions() {
-  try {
-    const jsonDirectory = path.join(process.cwd(), "public", "data");
-    const fileContents = await fs.readFile(
-      jsonDirectory + "/refregion.json",
-      "utf-8"
-    );
-
-    return JSON.parse(fileContents);
-  } catch (error) {
-    throw new Error("Failed to fetch API region data");
-  }
-}
-
 export async function getRegion(regCode: string) {
   try {
     const jsonDirectory = path.join(process.cwd(), "public", "data");
