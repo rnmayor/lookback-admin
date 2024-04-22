@@ -9,16 +9,12 @@ export type UserColumn = {
   id: string;
   name: string | null;
   email: string | null;
-  // regCode: string;
   region: Region;
-  // provCode: string;
   province: Province;
-  // citymunCode: string;
   cityMunicipality: CityMunicipality;
-  // brgyCode: string;
   barangay: Barangay;
   age: number;
-  covidStatus?: UserCovidStatus["status"];
+  covidStatus: UserCovidStatus["status"];
 };
 
 export const columns: ColumnDef<UserColumn>[] = [
@@ -35,44 +31,20 @@ export const columns: ColumnDef<UserColumn>[] = [
     header: "Email",
   },
   {
-    accessorKey: "region",
+    accessorKey: "region.regDesc",
     header: "Region",
-    cell: ({ row }) => {
-      const region = row.original.region;
-      return <div>{region.regDesc}</div>;
-    },
   },
   {
-    accessorKey: "province",
+    accessorKey: "province.provDesc",
     header: "Province",
-    cell: ({ row }) => {
-      const province = row.original.province;
-      return <div>{province.provDesc}</div>;
-    },
   },
   {
-    accessorKey: "cityMunicipality",
+    accessorKey: "cityMunicipality.citymunDesc",
     header: "City/Municipality",
-    cell: ({ row }) => {
-      const cityMunicipality = row.original.cityMunicipality;
-      return <div>{cityMunicipality.citymunDesc}</div>;
-    },
   },
-  // {
-  //   accessorKey: "citymunCode",
-  //   header: "City",
-  // },
-  // {
-  //   accessorKey: "brgyCode",
-  //   header: "Barangay",
-  // },
   {
-    accessorKey: "barangay",
+    accessorKey: "barangay.brgyDesc",
     header: "Barangay",
-    cell: ({ row }) => {
-      const barangay = row.original.barangay;
-      return <div>{barangay.brgyDesc}</div>;
-    },
   },
   {
     accessorKey: "age",

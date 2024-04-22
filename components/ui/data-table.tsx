@@ -37,7 +37,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [filtering, setFiltering] = useState("");
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
     data,
@@ -48,9 +48,9 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       columnFilters,
-      globalFilter: filtering,
+      globalFilter,
     },
-    onGlobalFilterChange: setFiltering,
+    onGlobalFilterChange: setGlobalFilter,
   });
 
   return (
@@ -59,8 +59,8 @@ export function DataTable<TData, TValue>({
         <div className="relative flex items-center w-full max-w-sm">
           <Input
             placeholder="Search..."
-            value={filtering}
-            onChange={(event) => setFiltering(event.target.value)}
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)}
             className="w-full pr-10" // Adjust padding-right to accomodate the icon
           />
           <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />

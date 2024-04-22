@@ -18,22 +18,18 @@ export default async function Users() {
     id: user.id,
     name: user.name,
     email: user.email,
-    // regCode: user.regCode,
     region: regions.find((item: Region) => item.regCode === user.regCode),
-    // provCode: user.provCode,
     province: provinces.find(
       (item: Province) => item.provCode === user.provCode
     ),
-    // citymunCode: user.citymunCode,
     cityMunicipality: cityMunicipalities.find(
       (item: CityMunicipality) => item.citymunCode === user.citymunCode
     ),
-    // brgyCode: user.brgyCode,
     barangay: barangays.find(
       (item: Barangay) => item.brgyCode === user.brgyCode
     ),
     age: user.age,
-    covidStatus: user.userCovidStatus?.status,
+    covidStatus: user.userCovidStatus ? user.userCovidStatus.status : "",
   }));
 
   return (
