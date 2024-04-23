@@ -27,8 +27,6 @@ function Calendar({
   ...props
 }: CalendarProps) {
   // Default to current date if no selected date
-  // const pattern = 'MMMM do, yyyy'
-  // const defaultMonth = parse(selectedDate, pattern, new Date()) ?? new Date();
   const defaultMonth = selectedDate ?? new Date();
 
   return (

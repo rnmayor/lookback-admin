@@ -14,14 +14,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@lib/actions/login";
 import { LoginSchema } from "@lib/schemas";
 import { useSearchParams } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import FormError from "./form-error";
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -33,10 +35,14 @@ const LoginForm = () => {
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     startTransition(() => {
-      login(values, callbackUrl).then((data) => {
-        // TODO: show error summary or alert
-        console.log("data", data);
-      });
+      login(values, callbackUrl)
+        .then((data) => {
+          if (data?.error) {
+            setError(data.error);
+          }
+          console.log("data", data);
+        })
+        .catch(() => setError("Something went wrong."));
     });
   };
 
@@ -86,6 +92,7 @@ const LoginForm = () => {
               )}
             />
           </div>
+          <FormError message={error} />
           <Button type="submit" disabled={isPending} className="w-full">
             Login
           </Button>

@@ -53,6 +53,7 @@ import { CalendarIcon, Check, ChevronsUpDown, Trash } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface UserFormProps {
@@ -167,21 +168,19 @@ const UserForm = ({
       setLoading(true);
       if (initialData) {
         await axios.patch(`/api/users/${params.userId}`, data);
+        toast.success("User successfully updated.");
+
         router.push(`/users`);
         router.refresh();
-        // TODO: toast success
-        console.log("SUCCESS UPDATE");
-        // todo: update to DB
       } else {
         await axios.post(`/api/users`, data);
+        toast.success("User successfully created.");
+
         router.push(`/users`);
         router.refresh();
-        // TODO: toast success
-        console.log("SUCCESS CREATE");
       }
     } catch (error) {
-      // TODO: toast error
-      console.log("error", error);
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -191,13 +190,12 @@ const UserForm = ({
     try {
       setLoading(true);
       await axios.delete(`/api/users/${params.userId}`);
+      toast.success("User successfully deleted.");
+
       router.push(`/users`);
       router.refresh();
-      // TODO: toast success
-      console.log("SUCCESS DELETE");
     } catch (error) {
-      // TODO: toast error
-      console.log("error", error);
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
     }

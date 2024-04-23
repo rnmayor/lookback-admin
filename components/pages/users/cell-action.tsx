@@ -14,6 +14,7 @@ import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { UserColumn } from "./columns";
 
 interface CellActionProps {
@@ -28,12 +29,11 @@ const CellAction = ({ data }: CellActionProps) => {
     try {
       setLoading(true);
       await axios.delete(`/api/users/${data.id}`);
+      toast.success("User successfully deleted.");
+
       router.refresh();
-      // TODO: toast success
-      console.log("SUCCESS DELETE");
     } catch (error) {
-      // TODO: toast error
-      console.log("error", error);
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
     }

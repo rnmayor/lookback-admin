@@ -6,7 +6,9 @@ export const LoginSchema = z.object({
 });
 
 export const UserSchema = z.object({
-  email: z.string().optional(),
+  email: z.string().email().min(1, {
+    message: "Email is required",
+  }),
   fname: z.string().min(1, {
     message: "First name is required",
   }),
@@ -28,9 +30,6 @@ export const UserSchema = z.object({
   gender: z.string().min(1, {
     message: "Gender is required",
   }),
-  // dob: z.string().min(1, {
-  //   message: "Birth date is required",
-  // }),
   dob: z.date().refine((date) => date !== undefined, {
     message: "Date of birth is required",
   }),
