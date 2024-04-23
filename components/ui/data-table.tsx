@@ -21,20 +21,21 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table";
+import { currentRole } from "@lib/hooks/client-auth";
+import { UserRole } from "@lib/utils/types";
 import { Plus, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  role: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  role,
 }: DataTableProps<TData, TValue>) {
+  const role = currentRole();
   const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -65,9 +66,11 @@ export function DataTable<TData, TValue>({
           />
           <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
         </div>
-        <Button size="sm" onClick={() => router.push(`/users/new`)}>
-          <Plus className="mr-2 h-4 w-4" /> Add New
-        </Button>
+        {role === UserRole.SUPER_ADMIN && (
+          <Button size="sm" onClick={() => router.push(`/users/new`)}>
+            <Plus className="mr-2 h-4 w-4" /> Add New
+          </Button>
+        )}
       </div>
       <div className="rounded-md border">
         <Table>

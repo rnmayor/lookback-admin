@@ -1,6 +1,13 @@
 import { IconType } from "react-icons";
 
 export type SortOrder = "asc" | "desc";
+
+export enum UserRole {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
+
 export enum Gender {
   FEMALE = "FEMALE",
   MALE = "MALE",

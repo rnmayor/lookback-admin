@@ -1,3 +1,4 @@
+import { auth } from "@auth";
 import ThemeProvider from "@components/providers/theme-provider";
 import ToasterProvider from "@components/providers/toaster-provider";
 import "@styles/globals.css";
@@ -12,13 +13,15 @@ export const metadata: Metadata = {
   description: "Lookback administration",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <ThemeProvider

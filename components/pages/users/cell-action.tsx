@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import { Separator } from "@components/ui/separator";
+import { currentRole } from "@lib/hooks/client-auth";
+import { UserRole } from "@lib/utils/types";
 import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -22,6 +24,7 @@ interface CellActionProps {
 }
 
 const CellAction = ({ data }: CellActionProps) => {
+  const role = currentRole();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -61,17 +64,19 @@ const CellAction = ({ data }: CellActionProps) => {
               <Edit className="mr-2 h-4 w-4" /> Update
             </Button>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={loading}
-            className="px-0"
-            onSelect={(e) => e.preventDefault()}
-          >
-            <ConfirmModal onConfirm={onDelete}>
-              <Button disabled={loading} variant="ghost" size="sm">
-                <Trash className="mr-2 h-4 w-4" /> Delete
-              </Button>
-            </ConfirmModal>
-          </DropdownMenuItem>
+          {role === UserRole.SUPER_ADMIN && (
+            <DropdownMenuItem
+              disabled={loading}
+              className="px-0"
+              onSelect={(e) => e.preventDefault()}
+            >
+              <ConfirmModal onConfirm={onDelete}>
+                <Button disabled={loading} variant="ghost" size="sm">
+                  <Trash className="mr-2 h-4 w-4" /> Delete
+                </Button>
+              </ConfirmModal>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

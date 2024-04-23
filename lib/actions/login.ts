@@ -4,6 +4,7 @@ import { signIn } from "@auth";
 import { getUserByEmail } from "@lib/data/user";
 import { LoginSchema } from "@lib/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "@lib/utils/routes";
+import { UserRole } from "@lib/utils/types";
 import { AuthError } from "next-auth";
 import * as z from "zod";
 
@@ -22,6 +23,10 @@ export const login = async (
   const existingUser = await getUserByEmail(email);
   if (!existingUser || !existingUser.email || !existingUser.password) {
     return { error: "Email does not exist!" };
+  }
+
+  if (!existingUser.role || existingUser.role === UserRole.USER) {
+    return { error: "You are not authorized!" };
   }
 
   try {

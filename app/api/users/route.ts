@@ -1,6 +1,7 @@
 import { getUserByEmail } from "@lib/data/user";
-import { currentUser } from "@lib/hooks/auth";
+import { currentRole, currentUser } from "@lib/hooks/auth";
 import { db } from "@lib/utils/db";
+import { UserRole } from "@lib/utils/types";
 import bcrypt from "bcryptjs";
 import { differenceInYears, formatISO } from "date-fns";
 import { NextResponse } from "next/server";
@@ -10,6 +11,11 @@ export async function GET() {
     const user = await currentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const role = await currentRole();
+    if (role === UserRole.USER) {
+      return new NextResponse("Forbidden", { status: 403 });
     }
 
     const users = await db.user.findMany({
@@ -29,6 +35,11 @@ export async function POST(req: Request) {
     const userSession = await currentUser();
     if (!userSession) {
       return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const role = await currentRole();
+    if (role !== UserRole.SUPER_ADMIN) {
+      return new NextResponse("Forbidden", { status: 403 });
     }
 
     const body = await req.json();

@@ -21,6 +21,7 @@ model User {
   image         String?
   password      String?
   accounts      Account[]
+  role          String    @default("USER")
 
   fname       String
   lname       String

@@ -37,6 +37,7 @@ import {
 import { Separator } from "@components/ui/separator";
 import { Switch } from "@components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { currentRole } from "@lib/hooks/client-auth";
 import { UserSchema } from "@lib/schemas";
 import { cn, sortByProperty } from "@lib/utils";
 import {
@@ -45,6 +46,7 @@ import {
   Gender,
   Province,
   Region,
+  UserRole,
 } from "@lib/utils/types";
 import { User, UserCovidStatus } from "@prisma/client";
 import axios from "axios";
@@ -75,6 +77,7 @@ const UserForm = ({
   cityMunicipalities,
   barangays,
 }: UserFormProps) => {
+  const role = currentRole();
   const params = useParams();
   const router = useRouter();
   const pathName = usePathname();
@@ -252,7 +255,7 @@ const UserForm = ({
     <>
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} subHeading />
-        {initialData && (
+        {initialData && role === UserRole.SUPER_ADMIN && (
           <ConfirmModal onConfirm={onDelete}>
             <Button disabled={loading} variant="destructive" size="sm">
               <Trash className="h-4 w-4" />

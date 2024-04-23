@@ -5,11 +5,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
+import { currentUser } from "@lib/hooks/client-auth";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import LogoutButton from "./logout-button";
 
 const UserButton = () => {
+  const user = currentUser();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="border-none focus:outline-none">
@@ -31,10 +34,8 @@ const UserButton = () => {
             </Avatar>
           </div>
           <div className="flex flex-col py-2">
-            <p className="text-sm">Ronel Mayor</p>
-            <p className="text-muted-foreground text-xs">
-              ronelmayor0428@gmail.com
-            </p>
+            <p className="text-sm">{user?.name}</p>
+            <p className="text-muted-foreground text-xs">{user?.email}</p>
           </div>
         </div>
         <LogoutButton>

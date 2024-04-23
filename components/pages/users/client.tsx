@@ -10,7 +10,7 @@ interface UsersClientProps {
 const UsersClient = ({ data }: UsersClientProps) => {
   return (
     <>
-      <DataTable columns={columns} data={data} role="ADMIN" />
+      <DataTable columns={columns} data={data} />
     </>
   );
 };

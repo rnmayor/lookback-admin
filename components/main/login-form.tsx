@@ -40,7 +40,6 @@ const LoginForm = () => {
           if (data?.error) {
             setError(data.error);
           }
-          console.log("data", data);
         })
         .catch(() => setError("Something went wrong."));
     });
