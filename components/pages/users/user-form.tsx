@@ -1,6 +1,7 @@
 "use client";
 
 import Heading from "@components/main/heading";
+import ConfirmModal from "@components/modals/confirm-modal";
 import { Button } from "@components/ui/button";
 import { Calendar } from "@components/ui/calendar";
 import {
@@ -186,6 +187,22 @@ const UserForm = ({
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/users/${params.userId}`);
+      router.push(`/users`);
+      router.refresh();
+      // TODO: toast success
+      console.log("SUCCESS DELETE");
+    } catch (error) {
+      // TODO: toast error
+      console.log("error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onRegionSelect = (region: Region) => {
     form.setValue("regCode", region.regCode);
     form.setValue("provCode", "");
@@ -238,14 +255,11 @@ const UserForm = ({
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} subHeading />
         {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => {}}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
+          <ConfirmModal onConfirm={onDelete}>
+            <Button disabled={loading} variant="destructive" size="sm">
+              <Trash className="h-4 w-4" />
+            </Button>
+          </ConfirmModal>
         )}
       </div>
       <Separator />
