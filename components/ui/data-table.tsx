@@ -11,8 +11,8 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@components/ui/button";
+import { Input } from "@components/ui/input";
 import {
   Table,
   TableBody,
@@ -20,7 +20,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@components/ui/table";
 import { Plus, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
