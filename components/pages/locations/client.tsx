@@ -2,17 +2,17 @@
 
 import { DataTable } from "@components/ui/data-table";
 import { usePathname } from "next/navigation";
-import { UserColumn, columns } from "./columns";
+import { LocationColumn, columns } from "./columns";
 
-interface UsersClientProps {
-  data: UserColumn[];
+interface LocationClientProps {
+  data: LocationColumn[];
 }
 
-const UsersClient = ({ data }: UsersClientProps) => {
+const LocationClient = ({ data }: LocationClientProps) => {
   const pathname = usePathname();
   const mainPage = pathname.split("/")[1];
 
   return <DataTable columns={columns} data={data} page={mainPage} />;
 };
 
-export default UsersClient;
+export default LocationClient;

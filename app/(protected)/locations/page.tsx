@@ -1,20 +1,16 @@
 "use client";
 
-import { Button } from "@components/ui/button";
-import { logout } from "@lib/actions/logout";
-import { useSession } from "next-auth/react";
+import LocationClient from "@components/pages/locations/client";
+import { LocationColumn } from "@components/pages/locations/columns";
 
-export default function Location() {
-  const onClick = () => {
-    logout();
-  };
-  const clientSession = useSession();
+export default function Locations() {
+  const formattedLocation: LocationColumn[] = [];
 
   return (
-    <div>
-      Location page
-      <Button onClick={onClick}>Logout</Button>
-      <div>Client session {JSON.stringify(clientSession)}</div>
+    <div className="flex-col">
+      <div className="flex-1 space-y-4 p-6 pt-5">
+        <LocationClient data={formattedLocation} />
+      </div>
     </div>
   );
 }

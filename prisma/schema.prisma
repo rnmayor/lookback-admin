@@ -37,19 +37,10 @@ model User {
   updatedAt DateTime @updatedAt
 
   userCovidStatus UserCovidStatus?
-}
+  userHistory     UserHistory[]
+  notification    Notification[]
 
-model UserCovidStatus {
-  id     String  @id @default(uuid())
-  status String?
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
+  @@index([id])
 }
 
 model Account {
@@ -72,4 +63,63 @@ model Account {
   updatedAt DateTime @updatedAt
 
   @@unique([provider, providerAccountId])
+}
+
+model UserCovidStatus {
+  id     String  @id @default(uuid())
+  status String?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Management {
+  id               String  @id @default(uuid())
+  name             String
+  email            String
+  password         String?
+  regCode          String
+  provCode         String
+  citymunCode      String
+  brgyCode         String
+  daysWithoutCovid Int     @default(0)
+
+  userHistory UserHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserHistory {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  managementId String
+  management   Management @relation(fields: [managementId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([managementId])
+  @@index([userId])
+}
+
+model Notification {
+  id      String @id @default(uuid())
+  message String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
