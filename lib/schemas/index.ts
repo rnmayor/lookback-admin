@@ -35,3 +35,24 @@ export const UserSchema = z.object({
   }),
   covidStatus: z.boolean().optional(),
 });
+
+export const LocationSchema = z.object({
+  email: z.string().email().min(1, {
+    message: "Email is required",
+  }),
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  regCode: z.string().min(1, {
+    message: "Region is required",
+  }),
+  provCode: z.string().min(1, {
+    message: "Province is required",
+  }),
+  citymunCode: z.string().min(1, {
+    message: "City is required",
+  }),
+  brgyCode: z.string().min(1, {
+    message: "Barangay is required",
+  }),
+});
