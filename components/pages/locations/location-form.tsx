@@ -162,8 +162,19 @@ const LocationForm = ({
     }
   };
 
-  const onDelete = () => {
-    // TODO: delete record
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/locations/${params.locationId}`);
+      toast.success("Location successfully deleted.");
+
+      router.push(`/locations`);
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onRegionSelect = (region: Region) => {

@@ -28,6 +28,7 @@ export default async function Locations() {
     barangay: barangays.find(
       (item: Barangay) => item.brgyCode === location.brgyCode
     ),
+    daysWithoutCovid: location.daysWithoutCovid,
   }));
 
   return (

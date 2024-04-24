@@ -41,4 +41,8 @@ export const columns: ColumnDef<LocationColumn>[] = [
     accessorKey: "barangay.brgyDesc",
     header: "Barangay",
   },
+  {
+    accessorKey: "daysWithoutCovid",
+    header: "Day(s) w/o Covid",
+  },
 ];
