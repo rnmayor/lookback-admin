@@ -41,8 +41,8 @@ export async function POST(req: Request) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const body = await req.json();
-    const { name, email, regCode, provCode, citymunCode, brgyCode } = body;
+    const { name, email, regCode, provCode, citymunCode, brgyCode } =
+      await req.json();
 
     const existingLocation = await getLocationByEmail(email);
     if (existingLocation) {

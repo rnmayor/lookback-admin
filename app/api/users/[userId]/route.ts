@@ -19,7 +19,6 @@ export async function PATCH(
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const body = await req.json();
     const {
       fname,
       lname,
@@ -30,7 +29,7 @@ export async function PATCH(
       brgyCode,
       gender,
       covidStatus,
-    } = body;
+    } = await req.json();
 
     const age = differenceInYears(formatISO(new Date()), formatISO(dob));
 

@@ -14,14 +14,23 @@ export const getUserWithAddress = async () => {
     },
   });
 
-  const formattedUsers = users.map((user) => ({
-    ...user,
-    region: getRegion(user.regCode),
-    province: getProvince(user.provCode),
-    cityMunicipality: getCityMunicipality(user.citymunCode),
-    barangay: getBarangay(user.brgyCode),
-  }));
+  const userPromises = users.map(async (user) => {
+    const region = await getRegion(user.regCode);
+    const province = await getProvince(user.provCode);
+    const cityMunicipality = await getCityMunicipality(user.citymunCode);
+    const barangay = await getBarangay(user.brgyCode);
 
+    return {
+      ...user,
+      region,
+      province,
+      cityMunicipality,
+      barangay,
+    };
+  });
+
+  // Wait for all promises to resolve
+  const formattedUsers = await Promise.all(userPromises);
   return formattedUsers;
 };
 
@@ -30,6 +39,9 @@ export const getUserByEmail = async (email: string) => {
     const user = await db.user.findUnique({
       where: {
         email,
+      },
+      include: {
+        userCovidStatus: true,
       },
     });
 

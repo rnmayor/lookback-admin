@@ -17,10 +17,12 @@ export const authRoutes: string[] = ["/auth/login", "/auth/error"];
 export const apiAuthPrefix: string = "/api/auth";
 
 /**
- * An array of API routes that will be exposed to public. Authentication will be handled through JWT strategy and not by Next-Auth
- * @type {string[]}
+ * The prefix for API public routes.
+ * Routes that starts with this prefix are used for public purposes
+ * Authentication of this apis are through JWT strategy and not handled by Next-Auth
+ * @type {string}
  */
-export const publicApiRoutes: string[] = ["/api/public/users"];
+export const apiPublicPrefix: string = "/api/public";
 
 /**
  * The default redirect path after logging in
@@ -28,10 +30,6 @@ export const publicApiRoutes: string[] = ["/api/public/users"];
  */
 export const DEFAULT_LOGIN_REDIRECT: string = "/users";
 
-/**
- * An array of routes that will be exposed to public. Authentication will be handled through JWT strategy and not by Next-Auth
- * @type {string[]}
- */
 export const ROUTES: AdminRoute[] = [
   {
     icon: FaUserCog,

@@ -42,7 +42,6 @@ export async function POST(req: Request) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const body = await req.json();
     const {
       fname,
       lname,
@@ -54,7 +53,7 @@ export async function POST(req: Request) {
       brgyCode,
       gender,
       covidStatus,
-    } = body;
+    } = await req.json();
 
     const existingUser = await getUserByEmail(email);
     if (existingUser) {

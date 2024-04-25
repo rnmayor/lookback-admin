@@ -1,34 +1,11 @@
 import UsersClient from "@components/pages/users/client";
 import { UserColumn } from "@components/pages/users/columns";
-import { getAllBarangays } from "@lib/data/barangay";
-import { getAllCityMunicipalities } from "@lib/data/cityMun";
-import { getAllProvinces } from "@lib/data/province";
-import { getAllRegions } from "@lib/data/region";
 import { getUserWithAddress } from "@lib/data/user";
-import { Barangay, CityMunicipality, Province, Region } from "@lib/utils/types";
 
 export default async function Users() {
   const users = await getUserWithAddress();
-  const regions = await getAllRegions();
-  const provinces = await getAllProvinces();
-  const cityMunicipalities = await getAllCityMunicipalities();
-  const barangays = await getAllBarangays();
-
   const formattedUsers: UserColumn[] = users.map((user) => ({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    region: regions.find((item: Region) => item.regCode === user.regCode),
-    province: provinces.find(
-      (item: Province) => item.provCode === user.provCode
-    ),
-    cityMunicipality: cityMunicipalities.find(
-      (item: CityMunicipality) => item.citymunCode === user.citymunCode
-    ),
-    barangay: barangays.find(
-      (item: Barangay) => item.brgyCode === user.brgyCode
-    ),
-    age: user.age,
+    ...user,
     covidStatus: user.userCovidStatus ? user.userCovidStatus.status : "",
   }));
 

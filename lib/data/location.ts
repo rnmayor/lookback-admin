@@ -11,14 +11,23 @@ export const getLocationWithAddress = async () => {
     },
   });
 
-  const formattedLocations = locations.map((location) => ({
-    ...location,
-    region: getRegion(location.regCode),
-    province: getProvince(location.provCode),
-    cityMunicipality: getCityMunicipality(location.citymunCode),
-    barangay: getBarangay(location.brgyCode),
-  }));
+  const locationPromises = locations.map(async (location) => {
+    const region = await getRegion(location.regCode);
+    const province = await getProvince(location.provCode);
+    const cityMunicipality = await getCityMunicipality(location.citymunCode);
+    const barangay = await getBarangay(location.brgyCode);
 
+    return {
+      ...location,
+      region,
+      province,
+      cityMunicipality,
+      barangay,
+    };
+  });
+
+  // Wait for all promises to resolve
+  const formattedLocations = await Promise.all(locationPromises);
   return formattedLocations;
 };
 

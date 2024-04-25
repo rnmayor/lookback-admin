@@ -18,8 +18,7 @@ export async function PATCH(
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const body = await req.json();
-    const { name, regCode, provCode, citymunCode, brgyCode } = body;
+    const { name, regCode, provCode, citymunCode, brgyCode } = await req.json();
 
     const location = await db.management.update({
       where: {
