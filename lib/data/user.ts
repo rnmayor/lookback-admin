@@ -35,35 +35,27 @@ export const getUserWithAddress = async () => {
 };
 
 export const getUserByEmail = async (email: string) => {
-  try {
-    const user = await db.user.findUnique({
-      where: {
-        email,
-      },
-      include: {
-        userCovidStatus: true,
-      },
-    });
+  const user = await db.user.findUnique({
+    where: {
+      email,
+    },
+    include: {
+      userCovidStatus: true,
+    },
+  });
 
-    return user;
-  } catch {
-    return null;
-  }
+  return user;
 };
 
 export const getUserById = async (id: string) => {
-  try {
-    const user = await db.user.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        userCovidStatus: true,
-      },
-    });
+  const user = await db.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      userCovidStatus: true,
+    },
+  });
 
-    return user;
-  } catch {
-    return null;
-  }
+  return user;
 };

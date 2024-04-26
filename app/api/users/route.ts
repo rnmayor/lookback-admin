@@ -1,7 +1,7 @@
 import { getUserByEmail } from "@lib/data/user";
 import { currentRole, currentUser } from "@lib/hooks/auth";
 import { db } from "@lib/utils/db";
-import { UserRole } from "@lib/utils/types";
+import { CovidStatus, UserRole } from "@lib/utils/types";
 import bcrypt from "bcryptjs";
 import { differenceInYears, formatISO } from "date-fns";
 import { NextResponse } from "next/server";
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
     if (typeof covidStatus !== "undefined") {
       await db.userCovidStatus.create({
         data: {
-          status: covidStatus ? "POSITIVE" : "NEGATIVE",
+          status: covidStatus ? CovidStatus.POSITIVE : CovidStatus.NEGATIVE,
           userId: user.id,
         },
       });

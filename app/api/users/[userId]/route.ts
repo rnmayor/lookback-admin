@@ -1,6 +1,6 @@
 import { currentRole, currentUser } from "@lib/hooks/auth";
 import { db } from "@lib/utils/db";
-import { UserRole } from "@lib/utils/types";
+import { CovidStatus, UserRole } from "@lib/utils/types";
 import { differenceInYears, formatISO } from "date-fns";
 import { NextResponse } from "next/server";
 
@@ -64,13 +64,13 @@ export async function PATCH(
             userId: user.id,
           },
           data: {
-            status: covidStatus ? "POSITIVE" : "NEGATIVE",
+            status: covidStatus ? CovidStatus.POSITIVE : CovidStatus.NEGATIVE,
           },
         });
       } else {
         await db.userCovidStatus.create({
           data: {
-            status: covidStatus ? "POSITIVE" : "NEGATIVE",
+            status: covidStatus ? CovidStatus.POSITIVE : CovidStatus.NEGATIVE,
             userId: user.id,
           },
         });

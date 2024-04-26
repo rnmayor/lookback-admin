@@ -13,6 +13,11 @@ export enum Gender {
   MALE = "MALE",
 }
 
+export enum CovidStatus {
+  POSITIVE = "POSITIVE",
+  NEGATIVE = "NEGATIVE",
+}
+
 export interface AdminRoute {
   icon: IconType;
   label: string;
