@@ -1,10 +1,12 @@
+import { baseURL } from "@lib/utils/constants";
 import { db } from "@lib/utils/db";
-import { getBarangay } from "./barangay";
-import { getCityMunicipality } from "./cityMun";
-import { getProvince } from "./province";
-import { getRegion } from "./region";
+import { Barangay, CityMunicipality, Province, Region } from "@lib/utils/types";
 
 export const getLocationWithAddress = async () => {
+  const fetchOptions: RequestInit = {
+    cache: "no-store", // Prevent caching
+  };
+
   const locations = await db.management.findMany({
     orderBy: {
       email: "asc",
@@ -12,10 +14,46 @@ export const getLocationWithAddress = async () => {
   });
 
   const locationPromises = locations.map(async (location) => {
-    const region = await getRegion(location.regCode);
-    const province = await getProvince(location.provCode);
-    const cityMunicipality = await getCityMunicipality(location.citymunCode);
-    const barangay = await getBarangay(location.brgyCode);
+    const region = await fetch(`${baseURL}/api/lookback/regions`)
+      .then((data) => {
+        return data.json();
+      })
+      .then((regions) => {
+        return regions.find((x: Region) => x.regCode === location.regCode);
+      });
+
+    const province = await fetch(`${baseURL}/api/lookback/provinces`)
+      .then((data) => {
+        return data.json();
+      })
+      .then((provinces) => {
+        return provinces.find(
+          (x: Province) => x.provCode === location.provCode
+        );
+      });
+    const cityMunicipality = await fetch(
+      `${baseURL}/api/lookback/city-municipalities`
+    )
+      .then((data) => {
+        return data.json();
+      })
+      .then((cityMunicipalities) => {
+        return cityMunicipalities.find(
+          (x: CityMunicipality) => x.citymunCode === location.citymunCode
+        );
+      });
+    const barangay = await fetch(
+      `${baseURL}/api/lookback/barangays`,
+      fetchOptions
+    )
+      .then((data) => {
+        return data.json();
+      })
+      .then((barangays) => {
+        return barangays.find(
+          (x: Barangay) => x.brgyCode === location.brgyCode
+        );
+      });
 
     return {
       ...location,

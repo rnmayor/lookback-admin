@@ -5,13 +5,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
-import { currentUser } from "@lib/hooks/client-auth";
+import { useCurrentUser } from "@lib/hooks/client-auth";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import LogoutButton from "./logout-button";
 
 const UserButton = () => {
-  const user = currentUser();
+  const user = useCurrentUser();
 
   return (
     <DropdownMenu>

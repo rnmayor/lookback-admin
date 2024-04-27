@@ -27,7 +27,7 @@ import {
 } from "@components/ui/popover";
 import { Separator } from "@components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { currentRole } from "@lib/hooks/client-auth";
+import { useCurrentRole } from "@lib/hooks/client-auth";
 import { LocationSchema } from "@lib/schemas";
 import { cn, sortByProperty } from "@lib/utils";
 import {
@@ -61,7 +61,7 @@ const LocationForm = ({
   cityMunicipalities,
   barangays,
 }: LocationFormProps) => {
-  const role = currentRole();
+  const role = useCurrentRole();
   const params = useParams();
   const router = useRouter();
   const pathName = usePathname();
@@ -103,7 +103,14 @@ const LocationForm = ({
       );
       setSortedBarangay(sortedBarangay);
     }
-  }, []);
+  }, [
+    barangays,
+    cityMunicipalities,
+    initialData,
+    locationId,
+    provinces,
+    router,
+  ]);
 
   const sortedRegions = sortByProperty(regions, "regDesc", "asc");
   const title = initialData ? "Edit location" : "Create location";

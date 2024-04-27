@@ -1,4 +1,4 @@
-import { currentRole, currentUser } from "@lib/hooks/auth";
+import { currentRole, currentUser } from "@lib/utils/auth";
 import { db } from "@lib/utils/db";
 import { UserRole } from "@lib/utils/types";
 import { NextResponse } from "next/server";
@@ -12,7 +12,6 @@ export async function PATCH(
     if (!userSession) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     const role = await currentRole();
     if (role === UserRole.USER) {
       return new NextResponse("Forbidden", { status: 403 });
@@ -49,7 +48,6 @@ export async function DELETE(
     if (!userSession) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     const role = await currentRole();
     if (role !== UserRole.SUPER_ADMIN) {
       return new NextResponse("Forbidden", { status: 403 });

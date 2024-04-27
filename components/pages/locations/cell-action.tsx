@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import { Separator } from "@components/ui/separator";
-import { currentRole } from "@lib/hooks/client-auth";
+import { useCurrentRole } from "@lib/hooks/client-auth";
 import { UserRole } from "@lib/utils/types";
 import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
@@ -34,7 +34,7 @@ interface CellActionProps {
 }
 
 const CellAction = ({ data }: CellActionProps) => {
-  const role = currentRole();
+  const role = useCurrentRole();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

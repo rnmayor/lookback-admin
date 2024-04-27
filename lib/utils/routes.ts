@@ -22,7 +22,7 @@ export const apiAuthPrefix: string = "/api/auth";
  * Authentication of this apis are through JWT strategy and not handled by Next-Auth
  * @type {string}
  */
-export const apiPublicPrefix: string = "/api/public";
+export const apiPublicPrefix: string = "/api/lookback";
 
 /**
  * The default redirect path after logging in

@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table";
-import { currentRole } from "@lib/hooks/client-auth";
+import { useCurrentRole } from "@lib/hooks/client-auth";
 import { UserRole } from "@lib/utils/types";
 import { Plus, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -37,7 +37,7 @@ export function DataTable<TData, TValue>({
   data,
   page,
 }: DataTableProps<TData, TValue>) {
-  const role = currentRole();
+  const role = useCurrentRole();
   const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");

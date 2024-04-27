@@ -1,5 +1,5 @@
 import { getLocationByEmail } from "@lib/data/location";
-import { currentRole, currentUser } from "@lib/hooks/auth";
+import { currentRole, currentUser } from "@lib/utils/auth";
 import { db } from "@lib/utils/db";
 import { UserRole } from "@lib/utils/types";
 import bcrypt from "bcryptjs";
@@ -11,7 +11,6 @@ export async function GET() {
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     const role = await currentRole();
     if (role === UserRole.USER) {
       return new NextResponse("Forbidden", { status: 403 });
@@ -35,7 +34,6 @@ export async function POST(req: Request) {
     if (!userSession) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     const role = await currentRole();
     if (role !== UserRole.SUPER_ADMIN) {
       return new NextResponse("Forbidden", { status: 403 });

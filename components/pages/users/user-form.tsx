@@ -37,7 +37,7 @@ import {
 import { Separator } from "@components/ui/separator";
 import { Switch } from "@components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { currentRole } from "@lib/hooks/client-auth";
+import { useCurrentRole } from "@lib/hooks/client-auth";
 import { UserSchema } from "@lib/schemas";
 import { cn, sortByProperty } from "@lib/utils";
 import {
@@ -77,7 +77,7 @@ const UserForm = ({
   cityMunicipalities,
   barangays,
 }: UserFormProps) => {
-  const role = currentRole();
+  const role = useCurrentRole();
   const params = useParams();
   const router = useRouter();
   const pathName = usePathname();
@@ -119,7 +119,7 @@ const UserForm = ({
       );
       setSortedBarangay(sortedBarangay);
     }
-  }, []);
+  }, [barangays, cityMunicipalities, initialData, provinces, router, userId]);
 
   const sortedRegions = sortByProperty(regions, "regDesc", "asc");
   const title = initialData ? "Edit user" : "Create user";

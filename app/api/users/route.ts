@@ -1,5 +1,5 @@
 import { getUserByEmail } from "@lib/data/user";
-import { currentRole, currentUser } from "@lib/hooks/auth";
+import { currentRole, currentUser } from "@lib/utils/auth";
 import { db } from "@lib/utils/db";
 import { CovidStatus, UserRole } from "@lib/utils/types";
 import bcrypt from "bcryptjs";
@@ -33,11 +33,10 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const userSession = await currentUser();
+    const role = await currentRole();
     if (!userSession) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
-    const role = await currentRole();
     if (role !== UserRole.SUPER_ADMIN) {
       return new NextResponse("Forbidden", { status: 403 });
     }

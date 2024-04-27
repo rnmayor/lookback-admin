@@ -1,13 +1,17 @@
 import { validatePublicApi } from "@lib/actions/validate-public-api";
-import { getBarangay } from "@lib/data/barangay";
-import { getCityMunicipality } from "@lib/data/cityMun";
-import { getProvince } from "@lib/data/province";
-import { getRegion } from "@lib/data/region";
+import { baseURL } from "@lib/utils/constants";
 import { db } from "@lib/utils/db";
+import { Barangay, CityMunicipality, Province, Region } from "@lib/utils/types";
 import { saveAs } from "file-saver";
 import fs from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
+
+// Force this route to be dynamic, allowing dynamic server-side logic
+export const dynamic = "force-dynamic";
+const fetchOptions: RequestInit = {
+  cache: "no-store", // Prevent caching
+};
 
 interface User {
   email: string;
@@ -22,7 +26,7 @@ interface User {
   covidStatus: string;
 }
 
-export async function GET(req: Request, response: NextResponse) {
+export async function GET(req: Request) {
   try {
     const authorization = req.headers.get("authorization");
     const validationResult = await validatePublicApi(authorization);
@@ -59,10 +63,42 @@ export async function GET(req: Request, response: NextResponse) {
     });
 
     const userPromises = users.map(async (user) => {
-      const region = await getRegion(user.regCode);
-      const province = await getProvince(user.provCode);
-      const cityMunicipality = await getCityMunicipality(user.citymunCode);
-      const barangay = await getBarangay(user.brgyCode);
+      const region = await fetch(`${baseURL}/api/lookback/regions`)
+        .then((data) => {
+          return data.json();
+        })
+        .then((regions) => {
+          return regions.find((x: Region) => x.regCode === user.regCode);
+        });
+
+      const province = await fetch(`${baseURL}/api/lookback/provinces`)
+        .then((data) => {
+          return data.json();
+        })
+        .then((provinces) => {
+          return provinces.find((x: Province) => x.provCode === user.provCode);
+        });
+      const cityMunicipality = await fetch(
+        `${baseURL}/api/lookback/city-municipalities`
+      )
+        .then((data) => {
+          return data.json();
+        })
+        .then((cityMunicipalities) => {
+          return cityMunicipalities.find(
+            (x: CityMunicipality) => x.citymunCode === user.citymunCode
+          );
+        });
+      const barangay = await fetch(
+        `${baseURL}/api/lookback/barangays`,
+        fetchOptions
+      )
+        .then((data) => {
+          return data.json();
+        })
+        .then((barangays) => {
+          return barangays.find((x: Barangay) => x.brgyCode === user.brgyCode);
+        });
 
       return {
         email: user.email,
@@ -109,7 +145,7 @@ export async function GET(req: Request, response: NextResponse) {
     const csvContent = [headerRow, ...dataRows].join("\n");
 
     // Write CSV content to a file
-    const filePath = path.join(process.cwd(), "users.csv");
+    const filePath = path.join("users.csv");
     fs.writeFileSync(filePath, csvContent);
 
     // Create a new Headers object to set the response headers
