@@ -1,10 +1,11 @@
 import LocationForm from "@components/pages/locations/location-form";
-import { baseURL } from "@lib/utils/constants";
+import {
+  getBarangays,
+  getCityMunicipalities,
+  getProvinces,
+  getRegions,
+} from "@lib/data/location";
 import { db } from "@lib/utils/db";
-
-const fetchOptions: RequestInit = {
-  cache: "no-store", // Prevent caching
-};
 
 export default async function Location({
   params,
@@ -19,27 +20,10 @@ export default async function Location({
     },
   });
 
-  const regions = await fetch(`${baseURL}/api/lookback/regions`).then(
-    (data) => {
-      return data.json();
-    }
-  );
-  const provinces = await fetch(`${baseURL}/api/lookback/provinces`).then(
-    (data) => {
-      return data.json();
-    }
-  );
-  const cityMunicipalities = await fetch(
-    `${baseURL}/api/lookback/city-municipalities`
-  ).then((data) => {
-    return data.json();
-  });
-  const barangays = await fetch(
-    `${baseURL}/api/lookback/barangays`,
-    fetchOptions
-  ).then((data) => {
-    return data.json();
-  });
+  const regions = await getRegions();
+  const provinces = await getProvinces();
+  const cityMunicipalities = await getCityMunicipalities();
+  const barangays = await getBarangays();
 
   return (
     <div className="flex-col">

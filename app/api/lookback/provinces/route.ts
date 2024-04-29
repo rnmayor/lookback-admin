@@ -5,12 +5,19 @@ import path from "path";
 
 export async function GET() {
   try {
-    const jsonDirectory = path.join(dataPath);
-    const fileContents = await fs.readFile(
-      jsonDirectory + "/refprovince.json",
-      "utf-8"
-    );
+    const jsonDirectory = path.join(process.cwd(), dataPath); // Ensure correct base directory
+    const filePath = path.join(jsonDirectory, "refprovince.json");
 
+    const fileExists = await fs
+      .access(filePath, fs.constants.F_OK)
+      .then(() => true)
+      .catch(() => false);
+
+    if (!fileExists) {
+      return new NextResponse("File for provinces not found", { status: 400 });
+    }
+
+    const fileContents = await fs.readFile(filePath, "utf-8");
     const provinces = JSON.parse(fileContents);
 
     return NextResponse.json(provinces);

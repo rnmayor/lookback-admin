@@ -5,7 +5,13 @@ import { getLocationWithAddress } from "@lib/data/location";
 export default async function Locations() {
   const locations = await getLocationWithAddress();
   const formattedLocation: LocationColumn[] = locations.map((location) => ({
-    ...location,
+    id: location.id,
+    name: location.name,
+    email: location.email,
+    region: location.region,
+    province: location.province,
+    cityMunicipality: location.cityMunicipality,
+    barangay: location.barangay,
   }));
 
   return (

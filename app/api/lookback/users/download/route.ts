@@ -1,5 +1,10 @@
 import { validatePublicApi } from "@lib/actions/validate-public-api";
-import { baseURL } from "@lib/utils/constants";
+import {
+  getBarangays,
+  getCityMunicipalities,
+  getProvinces,
+  getRegions,
+} from "@lib/data/location";
 import { db } from "@lib/utils/db";
 import { Barangay, CityMunicipality, Province, Region } from "@lib/utils/types";
 import { saveAs } from "file-saver";
@@ -9,9 +14,6 @@ import path from "path";
 
 // Force this route to be dynamic, allowing dynamic server-side logic
 export const dynamic = "force-dynamic";
-const fetchOptions: RequestInit = {
-  cache: "no-store", // Prevent caching
-};
 
 interface User {
   email: string;
@@ -63,42 +65,23 @@ export async function GET(req: Request) {
     });
 
     const userPromises = users.map(async (user) => {
-      const region = await fetch(`${baseURL}/api/lookback/regions`)
-        .then((data) => {
-          return data.json();
-        })
-        .then((regions) => {
-          return regions.find((x: Region) => x.regCode === user.regCode);
-        });
+      const regions = await getRegions();
+      const region = regions.find((x: Region) => x.regCode === user.regCode);
 
-      const province = await fetch(`${baseURL}/api/lookback/provinces`)
-        .then((data) => {
-          return data.json();
-        })
-        .then((provinces) => {
-          return provinces.find((x: Province) => x.provCode === user.provCode);
-        });
-      const cityMunicipality = await fetch(
-        `${baseURL}/api/lookback/city-municipalities`
-      )
-        .then((data) => {
-          return data.json();
-        })
-        .then((cityMunicipalities) => {
-          return cityMunicipalities.find(
-            (x: CityMunicipality) => x.citymunCode === user.citymunCode
-          );
-        });
-      const barangay = await fetch(
-        `${baseURL}/api/lookback/barangays`,
-        fetchOptions
-      )
-        .then((data) => {
-          return data.json();
-        })
-        .then((barangays) => {
-          return barangays.find((x: Barangay) => x.brgyCode === user.brgyCode);
-        });
+      const provinces = await getProvinces();
+      const province = provinces.find(
+        (x: Province) => x.provCode === user.provCode
+      );
+
+      const cityMunicipalities = await getCityMunicipalities();
+      const cityMunicipality = cityMunicipalities.find(
+        (x: CityMunicipality) => x.citymunCode === user.citymunCode
+      );
+
+      const barangays = await getBarangays();
+      const barangay = barangays.find(
+        (x: Barangay) => x.brgyCode === user.brgyCode
+      );
 
       return {
         email: user.email,
