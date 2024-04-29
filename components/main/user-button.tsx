@@ -18,7 +18,7 @@ const UserButton = () => {
       <DropdownMenuTrigger className="border-none focus:outline-none">
         <Avatar>
           <AvatarImage src="" />
-          <AvatarFallback className="bg-gradient-to-r from-orange-100 via-orange-300 to-orange-500">
+          <AvatarFallback className="bg-gradient-to-t from-orange-100 via-orange-300 to-orange-500">
             <FaUser />
           </AvatarFallback>
         </Avatar>
@@ -28,7 +28,7 @@ const UserButton = () => {
           <div className="px-2 py-2">
             <Avatar className="h-8 w-8">
               <AvatarImage src="" />
-              <AvatarFallback className="bg-gradient-to-r from-orange-100 via-orange-300 to-orange-500">
+              <AvatarFallback className="bg-gradient-to-t from-orange-100 via-orange-300 to-orange-500">
                 <FaUser />
               </AvatarFallback>
             </Avatar>

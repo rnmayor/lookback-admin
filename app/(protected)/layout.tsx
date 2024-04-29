@@ -8,13 +8,13 @@ export default function ProtectedLayout({
 }) {
   return (
     <div className="h-full">
-      <nav className="h-[97px] md:pl-56 fixed inset-y-0 w-full z-50">
+      <nav className="h-[80px] md:pl-56 fixed inset-y-0 w-full z-50">
         <Navbar />
       </nav>
       <nav className="hidden md:flex h-full w-56 flex-col fixed inset-y-0 z-50">
         <Sidebar />
       </nav>
-      <main className="md:pl-56 pt-[100px] h-full">{children}</main>
+      <main className="md:pl-56 pt-[80px] h-full">{children}</main>
     </div>
   );
 }

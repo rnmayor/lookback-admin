@@ -46,7 +46,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-center">
+    <div className="flex h-full flex-col items-center justify-center bg-gradient-to-t from-yellow-100 via-orange-300 to-orange-600">
       <Form {...form}>
         <form
           noValidate

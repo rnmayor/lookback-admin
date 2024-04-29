@@ -390,11 +390,17 @@ const UserForm = ({
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value
-                            ? regions.find(
-                                (region) => region.regCode === field.value
-                              )?.regDesc
-                            : "Select region"}
+                          {field.value ? (
+                            <span className="truncate">
+                              {
+                                regions.find(
+                                  (region) => region.regCode === field.value
+                                )?.regDesc
+                              }
+                            </span>
+                          ) : (
+                            <span>{"Select region"}</span>
+                          )}
                           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -412,14 +418,14 @@ const UserForm = ({
                                 className={cn(
                                   "text-sm",
                                   region?.regCode === field.value
-                                    ? "text-orange-600 bg-orange-400/20 hover:bg-orange-300/20 hover:text-orange-600"
+                                    ? "text-accent bg-primary"
                                     : ""
                                 )}
                               >
                                 {region.regDesc}
                                 <Check
                                   className={cn(
-                                    "ml-auto h-4 w-4",
+                                    "ml-auto h-5 w-5",
                                     region?.regCode === field.value
                                       ? "opacity-100"
                                       : "opacity-0"
@@ -453,11 +459,18 @@ const UserForm = ({
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value
-                            ? provinces.find(
-                                (province) => province.provCode === field.value
-                              )?.provDesc
-                            : "Select province"}
+                          {field.value ? (
+                            <span className="truncate">
+                              {
+                                provinces.find(
+                                  (province) =>
+                                    province.provCode === field.value
+                                )?.provDesc
+                              }
+                            </span>
+                          ) : (
+                            <span>{"Select province"}</span>
+                          )}
                           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -481,7 +494,7 @@ const UserForm = ({
                                 className={cn(
                                   "text-sm",
                                   province?.provCode === field.value
-                                    ? "text-orange-600 bg-orange-400/20 hover:bg-orange-300/20 hover:text-orange-600"
+                                    ? "text-accent bg-primary"
                                     : ""
                                 )}
                               >
@@ -522,11 +535,18 @@ const UserForm = ({
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value
-                            ? cityMunicipalities.find(
-                                (citymun) => citymun.citymunCode === field.value
-                              )?.citymunDesc
-                            : "Select city/municipality"}
+                          {field.value ? (
+                            <span className="truncate">
+                              {
+                                cityMunicipalities.find(
+                                  (citymun) =>
+                                    citymun.citymunCode === field.value
+                                )?.citymunDesc
+                              }
+                            </span>
+                          ) : (
+                            <span>{"Select city/municipality"}</span>
+                          )}
                           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -552,7 +572,7 @@ const UserForm = ({
                                 className={cn(
                                   "text-sm",
                                   cityMun.citymunCode === field.value
-                                    ? "text-orange-600 bg-orange-400/20 hover:bg-orange-300/20 hover:text-orange-600"
+                                    ? "text-accent bg-primary"
                                     : ""
                                 )}
                               >
@@ -593,11 +613,18 @@ const UserForm = ({
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value
-                            ? barangays.find(
-                                (barangay) => barangay.brgyCode === field.value
-                              )?.brgyDesc
-                            : "Select barangay"}
+                          {field.value ? (
+                            <span className="truncate">
+                              {
+                                barangays.find(
+                                  (barangay) =>
+                                    barangay.brgyCode === field.value
+                                )?.brgyDesc
+                              }
+                            </span>
+                          ) : (
+                            <span>{"Select barangay"}</span>
+                          )}
                           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -621,8 +648,8 @@ const UserForm = ({
                                 className={cn(
                                   "text-sm",
                                   barangay.brgyCode === field.value
-                                    ? "text-orange-600 bg-orange-400/20 hover:bg-orange-300/20 hover:text-orange-600"
-                                    : "focus:bg-accent focus:text-accent-foreground"
+                                    ? "text-accent bg-primary"
+                                    : ""
                                 )}
                               >
                                 {barangay.brgyDesc}
@@ -673,8 +700,8 @@ const UserForm = ({
                         value={Gender.FEMALE}
                         className={cn(
                           field.value === Gender.FEMALE
-                            ? "text-orange-600 bg-orange-400/20 hover:bg-orange-300/20 hover:text-orange-600 focus:text-orange-600 focus:bg-orange-300/20"
-                            : "focus:bg-accent focus:text-accent-foreground"
+                            ? "text-accent bg-primary"
+                            : ""
                         )}
                       >
                         Female
@@ -683,8 +710,8 @@ const UserForm = ({
                         value={Gender.MALE}
                         className={cn(
                           field.value === Gender.MALE
-                            ? "text-orange-600 bg-orange-400/20 hover:bg-orange-300/20 hover:text-orange-600 focus:text-orange-600 focus:bg-orange-300/20"
-                            : "focus:bg-accent focus:text-accent-foreground"
+                            ? "text-accent bg-primary"
+                            : ""
                         )}
                       >
                         Male
