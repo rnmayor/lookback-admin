@@ -64,7 +64,6 @@ export async function getRegions() {
     }
 
     const regions = await response.json();
-    console.log("regions-getRegions", regions);
     return regions;
   } catch (error) {
     console.log("Error fetching regions", error);

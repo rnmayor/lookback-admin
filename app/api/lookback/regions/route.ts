@@ -3,6 +3,15 @@ import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
 
+/**
+ * @swagger
+ * /api/lookback/regions:
+ *  get:
+ *    description: Returns all regions in the Philippines
+ *    responses:
+ *      200:
+ *        description: Success
+ */
 export async function GET() {
   try {
     const jsonDirectory = path.join(process.cwd(), dataPath); // Ensure correct base directory

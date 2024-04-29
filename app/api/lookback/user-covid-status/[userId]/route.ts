@@ -4,6 +4,41 @@ import { db } from "@lib/utils/db";
 import { CovidStatus } from "@lib/utils/types";
 import { NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/lookback/user-covid-status/{userId}:
+ *  patch:
+ *    description: Update user's covid status by userId
+ *    parameters:
+ *      - name: userId
+ *        in: path
+ *        required: true
+ *        description: The ID of the user
+ *        schema:
+ *          type: string
+ *    security:
+ *      - bearerAuth: []
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              status:
+ *                type: "string"
+ *                enum:
+ *                  - POSITIVE
+ *                  - NEGATIVE
+ *                description: User's covid status
+ *            required:
+ *              - status
+ *    responses:
+ *      200:
+ *        description: Success
+ *      401:
+ *        description: Unauthorized - Invalid or missing token
+ */
 export async function PATCH(
   req: Request,
   { params }: { params: { userId: string } }

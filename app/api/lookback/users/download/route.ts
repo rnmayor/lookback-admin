@@ -28,6 +28,19 @@ interface User {
   covidStatus: string;
 }
 
+/**
+ * @swagger
+ * /api/lookback/users/download:
+ *  get:
+ *    description: Download all users data that are within the city/municipality of the authorized user in csv format
+ *    security:
+ *      - bearerAuth: []
+ *    responses:
+ *      200:
+ *        description: Success
+ *      401:
+ *        description: Unauthorized - Invalid or missing token
+ */
 export async function GET(req: Request) {
   try {
     const authorization = req.headers.get("authorization");

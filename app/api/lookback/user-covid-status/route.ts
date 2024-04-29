@@ -4,6 +4,38 @@ import { db } from "@lib/utils/db";
 import { CovidStatus } from "@lib/utils/types";
 import { NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/lookback/user-covid-status:
+ *  post:
+ *    description: Create record for user-covid-status
+ *    security:
+ *      - bearerAuth: []
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *                description: User's email address
+ *              covidStatus:
+ *                type: "string"
+ *                enum:
+ *                  - POSITIVE
+ *                  - NEGATIVE
+ *                description: User's covid status
+ *            required:
+ *              - email
+ *              - covidStatus
+ *    responses:
+ *      200:
+ *        description: Success
+ *      400:
+ *        description: User is not existing
+ */
 export async function POST(req: Request) {
   try {
     const authorization = req.headers.get("authorization");
