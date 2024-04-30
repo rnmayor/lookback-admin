@@ -60,7 +60,6 @@ export async function POST(req: Request) {
     }
 
     const age = differenceInYears(formatISO(new Date()), formatISO(dob));
-
     const hashedPassword = await bcrypt.hash(
       `${process.env.DEFAULT_PASSWORD}`,
       10

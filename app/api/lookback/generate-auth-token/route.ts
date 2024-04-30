@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(token);
   } catch (error) {
-    console.log("POST_TOKEN", error);
+    console.log("[TOKEN_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

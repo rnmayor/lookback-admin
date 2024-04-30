@@ -22,7 +22,7 @@ import { NextResponse } from "next/server";
  *                type: string
  *                description: User's email address
  *              covidStatus:
- *                type: "string"
+ *                type: string
  *                enum:
  *                  - POSITIVE
  *                  - NEGATIVE
@@ -90,7 +90,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(createdUserCovidStatus);
   } catch (error) {
-    console.log("USER_COVID_STATUS_POST", error);
+    console.log("[USER_COVID_STATUS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

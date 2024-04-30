@@ -26,7 +26,7 @@ import { NextResponse } from "next/server";
  *            type: object
  *            properties:
  *              status:
- *                type: "string"
+ *                type: string
  *                enum:
  *                  - POSITIVE
  *                  - NEGATIVE
@@ -93,7 +93,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedUser);
   } catch (error) {
-    console.log("USER_COVID_STATUS_PATCH", error);
+    console.log("[USER_COVID_STATUS_PATCH]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

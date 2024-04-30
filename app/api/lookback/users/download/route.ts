@@ -160,7 +160,7 @@ export async function GET(req: Request) {
     // Return an empty response
     return new NextResponse(csvContent, { status: 200, headers });
   } catch (error) {
-    console.log("USERS_DOWNLOAD_GET", error);
+    console.log("[USERS_DOWNLOAD_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

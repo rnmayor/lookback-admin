@@ -1,5 +1,4 @@
 import { getUserByEmail } from "@lib/data/user";
-import { UserRole } from "@lib/utils/types";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -55,13 +54,13 @@ export const validatePublicApi = async (authorizationHeader: string | null) => {
     };
   }
 
-  // USER role is not allowed to access API
-  if (loginUser.role === UserRole.USER) {
-    return {
-      message: "Forbidden",
-      status: 403,
-    };
-  }
+  // // USER role is not allowed to access API
+  // if (loginUser.role === UserRole.USER) {
+  //   return {
+  //     message: "Forbidden",
+  //     status: 403,
+  //   };
+  // }
 
   // all validation passed
   return {
