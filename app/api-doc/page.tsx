@@ -36,7 +36,7 @@ export default async function IndexPage() {
           </Button>
         </div>
       </div>
-      <ReactSwagger spec={spec} />
+      <ReactSwagger spec={spec} url="/swagger.json" />
     </section>
   );
 }
