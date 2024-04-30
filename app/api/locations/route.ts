@@ -44,7 +44,7 @@ export async function POST(req: Request) {
 
     const existingLocation = await getLocationByEmail(email);
     if (existingLocation) {
-      return new NextResponse("Email already existing", { status: 400 });
+      return new NextResponse("Location already existing", { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(

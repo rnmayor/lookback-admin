@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
  * @swagger
  * /api/lookback/user-covid-status/{userId}:
  *  patch:
- *    description: Update user's covid status by userId
+ *    description: Update user's covid status by the authorized user
  *    parameters:
  *      - name: userId
  *        in: path

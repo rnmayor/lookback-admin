@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
  * @swagger
  * /api/lookback/user-covid-status:
  *  post:
- *    description: Create record for user-covid-status
+ *    description: Create record for user-covid-status by the authorized user
  *    security:
  *      - bearerAuth: []
  *    requestBody:

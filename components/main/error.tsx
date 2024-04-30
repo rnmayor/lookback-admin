@@ -18,7 +18,7 @@ const Error = ({ title, subtitle, message }: ErrorProps) => {
         <ExclamationTriangleIcon className="h-16 w-16 text-destructive" />
       </div>
       {message && <p className="text-muted-foreground text-lg">{message}</p>}
-      <Button variant="link" className="font-normal w-full" size="lg">
+      <Button variant="link" className="font-normal w-full" size="lg" asChild>
         <Link href={`${DEFAULT_LOGIN_REDIRECT}`}>Back to home page</Link>
       </Button>
     </div>

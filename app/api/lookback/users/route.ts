@@ -130,6 +130,9 @@ export async function GET(req: Request) {
  *              email:
  *                type: string
  *                description: User's email address (must be unique)
+ *              password:
+ *                type: string
+ *                description: User's password
  *              dob:
  *                type: string
  *                format: date-time
@@ -190,6 +193,7 @@ export async function POST(req: Request) {
       fname,
       lname,
       email,
+      password,
       dob,
       regCode,
       provCode,
@@ -205,10 +209,7 @@ export async function POST(req: Request) {
     }
 
     const age = differenceInYears(formatISO(new Date()), formatISO(dob));
-    const hashedPassword = await bcrypt.hash(
-      `${process.env.DEFAULT_PASSWORD}`,
-      10
-    );
+    const hashedPassword = await bcrypt.hash(`${password}`, 10);
     const user = await db.user.create({
       data: {
         name: `${fname} ${lname}`,

@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
  * @swagger
  * /api/lookback/users/{userId}:
  *  patch:
- *    description: Update user's record
+ *    description: Update user's record by the authorized user
  *    parameters:
  *      - name: userId
  *        in: path
