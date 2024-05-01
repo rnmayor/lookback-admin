@@ -12,6 +12,7 @@ export default async function Locations() {
     province: location.province,
     cityMunicipality: location.cityMunicipality,
     barangay: location.barangay,
+    daysWithoutCovid: location.daysWithoutCovid,
   }));
 
   return (

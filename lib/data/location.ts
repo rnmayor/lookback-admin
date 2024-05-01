@@ -13,17 +13,19 @@ export const getLocationWithAddress = async () => {
     const regions = await getRegions();
     const region = regions.find((x: Region) => x.regCode === location.regCode);
 
-    const provinces = await getProvinces();
+    const provinces = await getProvincesByRegCode(location.regCode);
     const province = provinces.find(
       (x: Province) => x.provCode === location.provCode
     );
 
-    const cityMunicipalities = await getCityMunicipalities();
+    const cityMunicipalities = await getCityMunicipalitiesByProvCode(
+      location.provCode
+    );
     const cityMunicipality = cityMunicipalities.find(
       (x: CityMunicipality) => x.citymunCode === location.citymunCode
     );
 
-    const barangays = await getBarangays();
+    const barangays = await getBarangaysByCitymunCode(location.citymunCode);
     const barangay = barangays.find(
       (x: Barangay) => x.brgyCode === location.brgyCode
     );
@@ -71,9 +73,11 @@ export async function getRegions() {
   }
 }
 
-export async function getProvinces() {
+export async function getProvincesByRegCode(regCode: string) {
   try {
-    const response = await fetch(`${baseURL}/api/lookback/provinces`);
+    const response = await fetch(
+      `${baseURL}/api/lookback/regions/${regCode}/provinces`
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch provinces");
     }
@@ -86,9 +90,11 @@ export async function getProvinces() {
   }
 }
 
-export async function getCityMunicipalities() {
+export async function getCityMunicipalitiesByProvCode(provCode: string) {
   try {
-    const response = await fetch(`${baseURL}/api/lookback/city-municipalities`);
+    const response = await fetch(
+      `${baseURL}/api/lookback/provinces/${provCode}/city-municipalities`
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch city-municipalities");
     }
@@ -101,15 +107,10 @@ export async function getCityMunicipalities() {
   }
 }
 
-export async function getBarangays() {
-  const fetchOptions: RequestInit = {
-    cache: "no-store", // Prevent caching
-  };
-
+export async function getBarangaysByCitymunCode(citymunCode: string) {
   try {
     const response = await fetch(
-      `${baseURL}/api/lookback/barangays`,
-      fetchOptions
+      `${baseURL}/api/lookback/city-municipalities/${citymunCode}/barangays`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch barangays");

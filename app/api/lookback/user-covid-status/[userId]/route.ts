@@ -61,13 +61,6 @@ export async function PATCH(
         status: 400,
       });
     }
-    // Check if user to update is within the admin's LGU
-    if (user.citymunCode !== loginUser.citymunCode) {
-      return new NextResponse(
-        "You cannot update user's covid status that is not within your LGU",
-        { status: 400 }
-      );
-    }
     // check if user to update has status
     if (!user.userCovidStatus) {
       return new NextResponse(

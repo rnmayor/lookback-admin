@@ -3,6 +3,9 @@ import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
 
+// Force this route to be dynamic, allowing dynamic server-side logic
+export const dynamic = "force-dynamic";
+
 /**
  * @swagger
  * /api/lookback/regions:

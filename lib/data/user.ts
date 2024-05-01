@@ -1,9 +1,9 @@
 import { db } from "@lib/utils/db";
 import { Barangay, CityMunicipality, Province, Region } from "@lib/utils/types";
 import {
-  getBarangays,
-  getCityMunicipalities,
-  getProvinces,
+  getBarangaysByCitymunCode,
+  getCityMunicipalitiesByProvCode,
+  getProvincesByRegCode,
   getRegions,
 } from "./location";
 
@@ -21,17 +21,19 @@ export const getUserWithAddress = async () => {
     const regions = await getRegions();
     const region = regions.find((x: Region) => x.regCode === user.regCode);
 
-    const provinces = await getProvinces();
+    const provinces = await getProvincesByRegCode(user.regCode);
     const province = provinces.find(
       (x: Province) => x.provCode === user.provCode
     );
 
-    const cityMunicipalities = await getCityMunicipalities();
+    const cityMunicipalities = await getCityMunicipalitiesByProvCode(
+      user.provCode
+    );
     const cityMunicipality = cityMunicipalities.find(
       (x: CityMunicipality) => x.citymunCode === user.citymunCode
     );
 
-    const barangays = await getBarangays();
+    const barangays = await getBarangaysByCitymunCode(user.citymunCode);
     const barangay = barangays.find(
       (x: Barangay) => x.brgyCode === user.brgyCode
     );

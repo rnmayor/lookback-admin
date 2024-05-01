@@ -27,6 +27,11 @@ import {
 } from "@components/ui/popover";
 import { Separator } from "@components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  getBarangaysByCitymunCode,
+  getCityMunicipalitiesByProvCode,
+  getProvincesByRegCode,
+} from "@lib/data/location";
 import { useCurrentRole } from "@lib/hooks/client-auth";
 import { LocationSchema } from "@lib/schemas";
 import { cn, sortByProperty } from "@lib/utils";
@@ -49,23 +54,18 @@ import { z } from "zod";
 interface LocationFormProps {
   initialData?: Management | null;
   regions: Region[];
-  provinces: Province[];
-  cityMunicipalities: CityMunicipality[];
-  barangays: Barangay[];
 }
 
-const LocationForm = ({
-  initialData,
-  regions,
-  provinces,
-  cityMunicipalities,
-  barangays,
-}: LocationFormProps) => {
+const LocationForm = ({ initialData, regions }: LocationFormProps) => {
   const role = useCurrentRole();
   const params = useParams();
   const router = useRouter();
   const pathName = usePathname();
   const locationId = pathName.split("/")[2];
+
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [cityMun, setCityMun] = useState<CityMunicipality[]>([]);
+  const [barangays, setBarangays] = useState<Barangay[]>([]);
 
   useEffect(() => {
     if (!initialData && locationId !== "new") {
@@ -73,44 +73,38 @@ const LocationForm = ({
     }
 
     if (initialData) {
-      const filteredProvinces = provinces.filter(
-        (x: Province) => x.regCode === initialData.regCode
-      );
-      const sortedProvinces = sortByProperty(
-        filteredProvinces,
-        "provDesc",
-        "asc"
-      );
-      setSortedProvinces(sortedProvinces);
+      const fetchProvinces = async () => {
+        const sortedProvinces = sortByProperty<Province>(
+          await getProvincesByRegCode(initialData.regCode),
+          "provDesc",
+          "asc"
+        );
+        setProvinces(sortedProvinces);
+      };
 
-      const filteredCityMun = cityMunicipalities.filter(
-        (x: CityMunicipality) => x.provCode === initialData.provCode
-      );
-      const sortedCityMun = sortByProperty(
-        filteredCityMun,
-        "citymunDesc",
-        "asc"
-      );
-      setSortedCityMun(sortedCityMun);
+      const fetchCityMunicipalities = async () => {
+        const sortedCityMun = sortByProperty<CityMunicipality>(
+          await getCityMunicipalitiesByProvCode(initialData.provCode),
+          "citymunDesc",
+          "asc"
+        );
+        setCityMun(sortedCityMun);
+      };
 
-      const filteredBarangay = barangays.filter(
-        (x: Barangay) => x.citymunCode === initialData.citymunCode
-      );
-      const sortedBarangay = sortByProperty(
-        filteredBarangay,
-        "brgyDesc",
-        "asc"
-      );
-      setSortedBarangay(sortedBarangay);
+      const fetchBarangays = async () => {
+        const sortedBarangay = sortByProperty<Barangay>(
+          await getBarangaysByCitymunCode(initialData.citymunCode),
+          "brgyDesc",
+          "asc"
+        );
+        setBarangays(sortedBarangay);
+      };
+
+      fetchProvinces();
+      fetchCityMunicipalities();
+      fetchBarangays();
     }
-  }, [
-    barangays,
-    cityMunicipalities,
-    initialData,
-    locationId,
-    provinces,
-    router,
-  ]);
+  }, [initialData, locationId, router]);
 
   const sortedRegions = sortByProperty(regions, "regDesc", "asc");
   const title = initialData ? "Edit location" : "Create location";
@@ -121,11 +115,6 @@ const LocationForm = ({
   const [openProvince, setOpenProvince] = useState(false);
   const [openCitymun, setOpenCitymun] = useState(false);
   const [openBarangay, setOpenBarangay] = useState(false);
-
-  const [sortedProvinces, setSortedProvinces] = useState<Province[]>([]);
-  const [sortedCityMun, setSortedCityMun] = useState<CityMunicipality[]>([]);
-  const [sortedBarangay, setSortedBarangay] = useState<Barangay[]>([]);
-
   const [loading, setLoading] = useState(false);
 
   const defaultValues = initialData
@@ -184,39 +173,50 @@ const LocationForm = ({
     }
   };
 
-  const onRegionSelect = (region: Region) => {
+  const onRegionSelect = async (region: Region) => {
     form.setValue("regCode", region.regCode);
     form.setValue("provCode", "");
     form.setValue("citymunCode", "");
     form.setValue("brgyCode", "");
 
-    setSortedProvinces(provinces.filter((x) => x.regCode === region.regCode));
-    setSortedCityMun([]);
-    setSortedBarangay([]);
+    const sortedProvinces = sortByProperty<Province>(
+      await getProvincesByRegCode(region.regCode),
+      "provDesc",
+      "asc"
+    );
+    setProvinces(sortedProvinces);
+    setCityMun([]);
+    setBarangays([]);
 
     setOpenRegion(false);
   };
 
-  const onProvinceSelect = (province: Province) => {
+  const onProvinceSelect = async (province: Province) => {
     form.setValue("provCode", province.provCode);
     form.setValue("citymunCode", "");
     form.setValue("brgyCode", "");
 
-    setSortedCityMun(
-      cityMunicipalities.filter((x) => x.provCode === province.provCode)
+    const sortedCityMun = sortByProperty<CityMunicipality>(
+      await getCityMunicipalitiesByProvCode(province.provCode),
+      "citymunDesc",
+      "asc"
     );
-    setSortedBarangay([]);
+    setCityMun(sortedCityMun);
+    setBarangays([]);
 
     setOpenProvince(false);
   };
 
-  const onCityMunSelect = (cityMun: CityMunicipality) => {
+  const onCityMunSelect = async (cityMun: CityMunicipality) => {
     form.setValue("citymunCode", cityMun.citymunCode);
     form.setValue("brgyCode", "");
 
-    setSortedBarangay(
-      barangays.filter((x) => x.citymunCode === cityMun.citymunCode)
+    const sortedBarangay = sortByProperty<Barangay>(
+      await getBarangaysByCitymunCode(cityMun.citymunCode),
+      "brgyDesc",
+      "asc"
     );
+    setBarangays(sortedBarangay);
 
     setOpenCitymun(false);
   };
@@ -396,12 +396,12 @@ const LocationForm = ({
                           <CommandEmpty>No province found.</CommandEmpty>
                           <CommandGroup
                             heading={
-                              sortedProvinces.length === 0
+                              provinces.length === 0
                                 ? "Select region first"
                                 : "Provinces"
                             }
                           >
-                            {sortedProvinces.map((province) => (
+                            {provinces.map((province) => (
                               <CommandItem
                                 key={province.provCode}
                                 onSelect={() => onProvinceSelect(province)}
@@ -452,7 +452,7 @@ const LocationForm = ({
                           {field.value ? (
                             <span className="truncate">
                               {
-                                cityMunicipalities.find(
+                                cityMun.find(
                                   (citymun) =>
                                     citymun.citymunCode === field.value
                                 )?.citymunDesc
@@ -474,12 +474,12 @@ const LocationForm = ({
                           </CommandEmpty>
                           <CommandGroup
                             heading={
-                              sortedCityMun.length === 0
+                              cityMun.length === 0
                                 ? "Select province first"
                                 : "City/Municipality"
                             }
                           >
-                            {sortedCityMun.map((cityMun) => (
+                            {cityMun.map((cityMun) => (
                               <CommandItem
                                 key={cityMun.citymunCode}
                                 onSelect={() => onCityMunSelect(cityMun)}
@@ -550,12 +550,12 @@ const LocationForm = ({
                           <CommandEmpty>No barangay found.</CommandEmpty>
                           <CommandGroup
                             heading={
-                              sortedBarangay.length === 0
+                              barangays.length === 0
                                 ? "Select city/municipality first"
                                 : "Barangays"
                             }
                           >
-                            {sortedBarangay.map((barangay) => (
+                            {barangays.map((barangay) => (
                               <CommandItem
                                 key={barangay.brgyCode}
                                 onSelect={() => onBarangaySelect(barangay)}

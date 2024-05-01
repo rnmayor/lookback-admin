@@ -1,8 +1,8 @@
 import { validatePublicApi } from "@lib/actions/validate-public-api";
 import {
-  getBarangays,
-  getCityMunicipalities,
-  getProvinces,
+  getBarangaysByCitymunCode,
+  getCityMunicipalitiesByProvCode,
+  getProvincesByRegCode,
   getRegions,
 } from "@lib/data/location";
 import { getUserByEmail } from "@lib/data/user";
@@ -74,17 +74,19 @@ export async function GET(req: Request) {
       const regions = await getRegions();
       const region = regions.find((x: Region) => x.regCode === user.regCode);
 
-      const provinces = await getProvinces();
+      const provinces = await getProvincesByRegCode(user.regCode);
       const province = provinces.find(
         (x: Province) => x.provCode === user.provCode
       );
 
-      const cityMunicipalities = await getCityMunicipalities();
+      const cityMunicipalities = await getCityMunicipalitiesByProvCode(
+        user.provCode
+      );
       const cityMunicipality = cityMunicipalities.find(
         (x: CityMunicipality) => x.citymunCode === user.citymunCode
       );
 
-      const barangays = await getBarangays();
+      const barangays = await getBarangaysByCitymunCode(user.citymunCode);
       const barangay = barangays.find(
         (x: Barangay) => x.brgyCode === user.brgyCode
       );

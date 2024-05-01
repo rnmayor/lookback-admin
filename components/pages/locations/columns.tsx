@@ -10,6 +10,7 @@ export type LocationColumn = {
   province: Province;
   cityMunicipality: CityMunicipality;
   barangay: Barangay;
+  daysWithoutCovid: number;
 };
 
 export const columns: ColumnDef<LocationColumn>[] = [

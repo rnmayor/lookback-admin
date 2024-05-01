@@ -1,4 +1,5 @@
 import { dataPath } from "@lib/utils/constants";
+import { CityMunicipality } from "@lib/utils/types";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
@@ -8,14 +9,24 @@ export const dynamic = "force-dynamic";
 
 /**
  * @swagger
- * /api/lookback/city-municipalities:
+ * /api/lookback/provinces/{provCode}/city-municipalities:
  *  get:
- *    description: Returns all city/municipalities in the Philippines
+ *    description: Returns all city/municipalities in the Philippines for specific provCode
+ *    parameters:
+ *      - name: provCode
+ *        in: path
+ *        required: true
+ *        description: The provCode of the province
+ *        schema:
+ *          type: string
  *    responses:
  *      200:
  *        description: Success
  */
-export async function GET() {
+export async function GET(
+  req: Request,
+  { params }: { params: { provCode: string } }
+) {
   try {
     const jsonDirectory = path.join(process.cwd(), dataPath); // Ensure correct base directory
     const filePath = path.join(jsonDirectory, "refcitymun.json");
@@ -32,7 +43,9 @@ export async function GET() {
     }
 
     const fileContents = await fs.readFile(filePath, "utf-8");
-    const cityMunicipalities = JSON.parse(fileContents);
+    const cityMunicipalities = JSON.parse(fileContents).filter(
+      (x: CityMunicipality) => x.provCode === params.provCode
+    );
 
     return NextResponse.json(cityMunicipalities);
   } catch (error) {

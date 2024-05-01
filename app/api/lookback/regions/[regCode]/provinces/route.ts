@@ -1,4 +1,5 @@
 import { dataPath } from "@lib/utils/constants";
+import { Province } from "@lib/utils/types";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
@@ -8,14 +9,24 @@ export const dynamic = "force-dynamic";
 
 /**
  * @swagger
- * /api/lookback/provinces:
+ * /api/lookback/regions/{regCode}/provinces:
  *  get:
- *    description: Returns all provinces in the Philippines
+ *    description: Returns all provinces in the Philippines for specific regCode
+ *    parameters:
+ *      - name: regCode
+ *        in: path
+ *        required: true
+ *        description: The regCode of the region
+ *        schema:
+ *          type: string
  *    responses:
  *      200:
  *        description: Success
  */
-export async function GET() {
+export async function GET(
+  req: Request,
+  { params }: { params: { regCode: string } }
+) {
   try {
     const jsonDirectory = path.join(process.cwd(), dataPath); // Ensure correct base directory
     const filePath = path.join(jsonDirectory, "refprovince.json");
@@ -30,7 +41,9 @@ export async function GET() {
     }
 
     const fileContents = await fs.readFile(filePath, "utf-8");
-    const provinces = JSON.parse(fileContents);
+    const provinces = JSON.parse(fileContents).filter(
+      (x: Province) => x.regCode === params.regCode
+    );
 
     return NextResponse.json(provinces);
   } catch (error) {

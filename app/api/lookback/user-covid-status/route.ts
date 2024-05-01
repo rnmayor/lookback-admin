@@ -46,7 +46,6 @@ export async function POST(req: Request) {
       });
     }
 
-    const loginUser = validationResult.loginUser;
     // now we have fully verified the user and role accessing this api
     // validate the user's covid status to create
     const { email, covidStatus } = await req.json();
@@ -61,13 +60,6 @@ export async function POST(req: Request) {
       return new NextResponse("Missing 'covidStatus' in request body.", {
         status: 400,
       });
-    }
-    // Check if user to update is within the admin's LGU
-    if (user.citymunCode !== loginUser.citymunCode) {
-      return new NextResponse(
-        "You cannot create user's covid status that is not within your LGU",
-        { status: 400 }
-      );
     }
     // Check if user to update has existing status
     if (user.userCovidStatus) {
