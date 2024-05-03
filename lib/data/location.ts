@@ -58,6 +58,20 @@ export const getLocationByEmail = async (email: string) => {
   }
 };
 
+export const getLocationById = async (locationId: string) => {
+  try {
+    const location = await db.management.findUnique({
+      where: {
+        id: locationId,
+      },
+    });
+
+    return location;
+  } catch {
+    return null;
+  }
+};
+
 export async function getRegions() {
   try {
     const response = await fetch(`${baseURL}/api/lookback/regions`);

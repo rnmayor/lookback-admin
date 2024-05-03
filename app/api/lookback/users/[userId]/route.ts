@@ -1,12 +1,137 @@
 import { validatePublicApi } from "@lib/actions/validate-public-api";
+import {
+  getBarangaysByCitymunCode,
+  getCityMunicipalitiesByProvCode,
+  getProvincesByRegCode,
+  getRegions,
+} from "@lib/data/location";
 import { db } from "@lib/utils/db";
-import { CovidStatus } from "@lib/utils/types";
+import {
+  Barangay,
+  CityMunicipality,
+  CovidStatus,
+  Province,
+  Region,
+} from "@lib/utils/types";
 import bcrypt from "bcryptjs";
 import { differenceInYears, formatISO } from "date-fns";
 import { NextResponse } from "next/server";
 
 // Force this route to be dynamic, allowing dynamic server-side logic
 export const dynamic = "force-dynamic";
+
+/**
+ * @swagger
+ * /api/lookback/users/{userId}:
+ *  get:
+ *    description: Get user data by the authorized user
+ *    parameters:
+ *      - name: userId
+ *        in: path
+ *        required: true
+ *        description: The ID of the user
+ *        schema:
+ *          type: string
+ *    security:
+ *      - bearerAuth: []
+ *    responses:
+ *      200:
+ *        description: Success
+ *      401:
+ *        description: Unauthorized - Invalid or missing token
+ */
+export async function GET(
+  req: Request,
+  {
+    params,
+  }: {
+    params: { userId: string };
+  }
+) {
+  try {
+    const authorization = req.headers.get("authorization");
+    const validationResult = await validatePublicApi(authorization);
+    if (!validationResult.loginUser) {
+      return new NextResponse(`${validationResult.message}`, {
+        status: validationResult.status,
+      });
+    }
+
+    // now we have fully verified the user and role accessing this api
+    // we can get the user's information
+    const user = await db.user.findUnique({
+      where: {
+        id: params.userId,
+      },
+    });
+    if (!user) {
+      return new NextResponse("User is not existing", { status: 400 });
+    }
+    const userPromises = [user].map(async (user) => {
+      const regions = await getRegions();
+      const region = regions.find((x: Region) => x.regCode === user.regCode);
+
+      const provinces = await getProvincesByRegCode(user.regCode);
+      const province = provinces.find(
+        (x: Province) => x.provCode === user.provCode
+      );
+
+      const cityMunicipalities = await getCityMunicipalitiesByProvCode(
+        user.provCode
+      );
+      const cityMunicipality = cityMunicipalities.find(
+        (x: CityMunicipality) => x.citymunCode === user.citymunCode
+      );
+
+      const barangays = await getBarangaysByCitymunCode(user.citymunCode);
+      const barangay = barangays.find(
+        (x: Barangay) => x.brgyCode === user.brgyCode
+      );
+
+      const userHistory = await db.userHistory.findMany({
+        where: {
+          userId: user.id,
+        },
+      });
+      const promisedUserHistories = userHistory.map(async (history) => {
+        const management = await db.management.findUnique({
+          where: {
+            id: history.managementId,
+          },
+        });
+        return {
+          ...history,
+          management: management?.name,
+          managementEmail: management?.email,
+        };
+      });
+      const userHistories = await Promise.all(promisedUserHistories);
+
+      const notifications = await db.notification.findMany({
+        where: {
+          userId: user.id,
+        },
+      });
+
+      return {
+        ...user,
+        region: region.regDesc,
+        province: province.provDesc,
+        cityMunicipality: cityMunicipality.citymunDesc,
+        barangay: barangay.brgyDesc,
+        userHistories: userHistories,
+        notifications: notifications,
+      };
+    });
+
+    // Wait for all promises to resolve
+    const [formattedUser] = await Promise.all(userPromises);
+    return NextResponse.json(formattedUser);
+  } catch (error) {
+    console.log("USER_GET", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
 
 /**
  * @swagger
