@@ -37,11 +37,6 @@ import {
 import { Separator } from "@components/ui/separator";
 import { Switch } from "@components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  getBarangaysByCitymunCode,
-  getCityMunicipalitiesByProvCode,
-  getProvincesByRegCode,
-} from "@lib/data/location";
 import { useCurrentRole } from "@lib/hooks/client-auth";
 import { UserSchema } from "@lib/schemas";
 import { cn, sortByProperty } from "@lib/utils";
@@ -90,8 +85,11 @@ const UserForm = ({ initialData, regions }: UserFormProps) => {
 
     if (initialData) {
       const fetchProvinces = async () => {
+        const provinces = await axios.get(
+          `/api/lookback/regions/${initialData.regCode}/provinces`
+        );
         const sortedProvinces = sortByProperty<Province>(
-          await getProvincesByRegCode(initialData.regCode),
+          provinces.data,
           "provDesc",
           "asc"
         );
@@ -99,8 +97,11 @@ const UserForm = ({ initialData, regions }: UserFormProps) => {
       };
 
       const fetchCityMunicipalities = async () => {
+        const cityMunicipalities = await axios.get(
+          `/api/lookback/provinces/${initialData.provCode}/city-municipalities`
+        );
         const sortedCityMun = sortByProperty<CityMunicipality>(
-          await getCityMunicipalitiesByProvCode(initialData.provCode),
+          cityMunicipalities.data,
           "citymunDesc",
           "asc"
         );
@@ -108,8 +109,11 @@ const UserForm = ({ initialData, regions }: UserFormProps) => {
       };
 
       const fetchBarangays = async () => {
+        const barangays = await axios.get(
+          `/api/lookback/city-municipalities/${initialData.citymunCode}/barangays`
+        );
         const sortedBarangay = sortByProperty<Barangay>(
-          await getBarangaysByCitymunCode(initialData.citymunCode),
+          barangays.data,
           "brgyDesc",
           "asc"
         );
@@ -206,8 +210,11 @@ const UserForm = ({ initialData, regions }: UserFormProps) => {
     form.setValue("citymunCode", "");
     form.setValue("brgyCode", "");
 
+    const provinces = await axios.get(
+      `/api/lookback/regions/${region.regCode}/provinces`
+    );
     const sortedProvinces = sortByProperty<Province>(
-      await getProvincesByRegCode(region.regCode),
+      provinces.data,
       "provDesc",
       "asc"
     );
@@ -223,8 +230,11 @@ const UserForm = ({ initialData, regions }: UserFormProps) => {
     form.setValue("citymunCode", "");
     form.setValue("brgyCode", "");
 
+    const cityMunicipalities = await axios.get(
+      `/api/lookback/provinces/${province.provCode}/city-municipalities`
+    );
     const sortedCityMun = sortByProperty<CityMunicipality>(
-      await getCityMunicipalitiesByProvCode(province.provCode),
+      cityMunicipalities.data,
       "citymunDesc",
       "asc"
     );
@@ -238,8 +248,11 @@ const UserForm = ({ initialData, regions }: UserFormProps) => {
     form.setValue("citymunCode", cityMun.citymunCode);
     form.setValue("brgyCode", "");
 
+    const barangays = await axios.get(
+      `/api/lookback/city-municipalities/${cityMun.citymunCode}/barangays`
+    );
     const sortedBarangay = sortByProperty<Barangay>(
-      await getBarangaysByCitymunCode(cityMun.citymunCode),
+      barangays.data,
       "brgyDesc",
       "asc"
     );
