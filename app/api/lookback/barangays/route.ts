@@ -1,4 +1,3 @@
-import { dataPath } from "@lib/utils/constants";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
@@ -17,7 +16,10 @@ export const dynamic = "force-dynamic";
  */
 export async function GET() {
   try {
-    const jsonDirectory = path.join(process.cwd(), dataPath); // Ensure correct base directory
+    const jsonDirectory = path.join(
+      process.cwd(),
+      process.env.DATA_PATH ?? "public/data"
+    ); // Ensure correct base directory
     const filePath = path.join(jsonDirectory, "refbrgy.json");
 
     const fileExists = await fs

@@ -1,4 +1,3 @@
-import { dataPath } from "@lib/utils/constants";
 import { Barangay } from "@lib/utils/types";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
@@ -28,7 +27,10 @@ export async function GET(
   { params }: { params: { citymunCode: string } }
 ) {
   try {
-    const jsonDirectory = path.join(process.cwd(), dataPath); // Ensure correct base directory
+    const jsonDirectory = path.join(
+      process.cwd(),
+      process.env.DATA_PATH ?? "public/data"
+    ); // Ensure correct base directory
     const filePath = path.join(jsonDirectory, "refbrgy.json");
 
     const fileExists = await fs

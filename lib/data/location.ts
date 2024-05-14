@@ -1,4 +1,3 @@
-import { baseURL } from "@lib/utils/constants";
 import { db } from "@lib/utils/db";
 import { Barangay, CityMunicipality, Province, Region } from "@lib/utils/types";
 
@@ -74,7 +73,9 @@ export const getLocationById = async (locationId: string) => {
 
 export async function getRegions() {
   try {
-    const response = await fetch(`${baseURL}/api/lookback/regions`);
+    const response = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/lookback/regions`
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch regions");
     }
@@ -90,7 +91,7 @@ export async function getRegions() {
 export async function getProvincesByRegCode(regCode: string) {
   try {
     const response = await fetch(
-      `${baseURL}/api/lookback/regions/${regCode}/provinces`
+      `${process.env.NEXTAUTH_URL}/api/lookback/regions/${regCode}/provinces`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch provinces");
@@ -107,7 +108,7 @@ export async function getProvincesByRegCode(regCode: string) {
 export async function getCityMunicipalitiesByProvCode(provCode: string) {
   try {
     const response = await fetch(
-      `${baseURL}/api/lookback/provinces/${provCode}/city-municipalities`
+      `${process.env.NEXTAUTH_URL}/api/lookback/provinces/${provCode}/city-municipalities`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch city-municipalities");
@@ -124,7 +125,7 @@ export async function getCityMunicipalitiesByProvCode(provCode: string) {
 export async function getBarangaysByCitymunCode(citymunCode: string) {
   try {
     const response = await fetch(
-      `${baseURL}/api/lookback/city-municipalities/${citymunCode}/barangays`
+      `${process.env.NEXTAUTH_URL}/api/lookback/city-municipalities/${citymunCode}/barangays`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch barangays");
